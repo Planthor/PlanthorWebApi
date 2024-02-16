@@ -18,3 +18,7 @@ TODO: Add details feature to WebApi
 ```bash
 git clone https://github.com/Planthor/PlanthorWebApi.git
 ```
+
+## Documentation
+
+Please check WIKI for more documentation.
