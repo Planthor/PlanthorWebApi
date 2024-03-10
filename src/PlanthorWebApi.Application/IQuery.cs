@@ -1,3 +1,5 @@
+using MediatR;
+
 namespace PlanthorWebApi.Application;
 
 /// <summary>
@@ -5,6 +7,6 @@ namespace PlanthorWebApi.Application;
 /// You can find the article at: https://code-maze.com/cqrs-mediatr-fluentvalidation/
 /// </summary>
 /// <typeparam name="TResponse">The type of the response.</typeparam>
-public interface IQuery<out TResponse>
+public interface IQuery<out TResponse> : IRequest<TResponse>
 {
 }
