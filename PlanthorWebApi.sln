@@ -9,6 +9,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PlanthorWebApi.Domain", "sr
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PlanthorWebApi.Application", "src\PlanthorWebApi.Application\PlanthorWebApi.Application.csproj", "{5F127EA1-0C92-40AF-B58A-25A7D694DED9}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PlanthorWebApi.Infrastructure", "src\PlanthorWebApi.Infrastructure\PlanthorWebApi.Infrastructure.csproj", "{6AF94FA8-3EA2-444A-9E8E-E544B4ECB355}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -26,9 +28,14 @@ Global
 		{5F127EA1-0C92-40AF-B58A-25A7D694DED9}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{5F127EA1-0C92-40AF-B58A-25A7D694DED9}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{5F127EA1-0C92-40AF-B58A-25A7D694DED9}.Release|Any CPU.Build.0 = Release|Any CPU
+		{6AF94FA8-3EA2-444A-9E8E-E544B4ECB355}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{6AF94FA8-3EA2-444A-9E8E-E544B4ECB355}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{6AF94FA8-3EA2-444A-9E8E-E544B4ECB355}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{6AF94FA8-3EA2-444A-9E8E-E544B4ECB355}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(NestedProjects) = preSolution
 		{F92D1F3A-2C99-4750-A1A1-8BA3BBA5052C} = {EC7E7B89-0D57-4E57-ACCB-A86411E40436}
 		{5F127EA1-0C92-40AF-B58A-25A7D694DED9} = {EC7E7B89-0D57-4E57-ACCB-A86411E40436}
+		{6AF94FA8-3EA2-444A-9E8E-E544B4ECB355} = {EC7E7B89-0D57-4E57-ACCB-A86411E40436}
 	EndGlobalSection
 EndGlobal

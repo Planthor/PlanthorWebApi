@@ -7,6 +7,6 @@ namespace PlanthorWebApi.Application;
 /// You can find the article at: https://code-maze.com/cqrs-mediatr-fluentvalidation/
 /// </summary>
 /// <typeparam name="TResponse">The type of the response.</typeparam>
-interface ICommand<out TResponse> : IRequest<TResponse>
+public interface ICommand<out TResponse> : IRequest<TResponse>
 {
 }
