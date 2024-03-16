@@ -1,0 +1,43 @@
+version: '3.8'
+name: planthor-webapi-ws 
+
+services:
+  planthorwebapi:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    volumes:
+      - ..:/workspace/planthorwebapi:cached
+    command: sleep infinity
+    user: vscode
+    # depends_on:
+    #   - postgresql
+
+  # postgresql:
+  #   image: postgres:16
+  #   restart: always
+  #   environment:
+  #     POSTGRES_USER: planthor-admin
+  #     POSTGRES_PASSWORD: Planthor@123
+  #     POSTGRES_DB: PLANTHOR_IDENTITY
+  #   volumes:
+  #     - local-pgdata:/var/lib/postgresql/data
+  #   ports:
+  #     - 5432:5432
+
+  # pgadmin:
+  #   image: dpage/pgadmin4:8
+  #   restart: always
+  #   environment:
+  #     PGADMIN_DEFAULT_EMAIL: planthor-admin@planthor.com
+  #     PGADMIN_DEFAULT_PASSWORD: Planthor@123
+  #   volumes:
+  #     - pgadmin-data:/var/lib/pgadmin
+  #   depends_on:
+  #     - postgresql
+  #   ports:
+  #     - 8888:80
+
+# volumes:
+#   local-pgdata:
+#   pgadmin-data: 
