@@ -9,7 +9,7 @@ TODO: Add details feature to WebApi
 ## Requirements
 
 - .NET 8 SDK or higher
-- NoSQL database (MongoDB, Couchbase, etc.)
+- NoSQL database (MongoDB, etc.)
 
 ## Installation
 

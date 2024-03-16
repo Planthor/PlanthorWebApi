@@ -30,7 +30,7 @@ indent_size = 2
 end_of_line = lf
 
 # HTML, CSS, SCSS and JS files settings
-[*.{html,css,scss,js,Dockerfile,json,sh}]
+[*.{html,css,scss,js,Dockerfile,json,sh,csproj,props}]
 indent_style = space
 end_of_line = lf
 indent_size = 2

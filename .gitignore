@@ -729,3 +729,6 @@ FodyWeavers.xsd
 
 # VS Code files for those working on multiple tools
 *.code-workspace
+
+# git config
+.gitconfig
