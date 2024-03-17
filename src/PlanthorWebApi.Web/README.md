@@ -9,7 +9,3 @@ Contains controllers that handle HTTP requests and responses.
 ## Middleware
 
 Contains middleware components for request/response processing.
-
-## DTOs
-
-Contains Data Transfer Objects (DTOs) used for input and output serialization.
