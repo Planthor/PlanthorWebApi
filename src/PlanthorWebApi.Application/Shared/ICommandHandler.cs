@@ -1,6 +1,6 @@
 using MediatR;
 
-namespace PlanthorWebApi.Application;
+namespace PlanthorWebApi.Application.Shared;
 
 /// <summary>
 /// Represents a handler for a command that produces a response.
@@ -9,6 +9,4 @@ namespace PlanthorWebApi.Application;
 /// <typeparam name="TCommand">The type of the command.</typeparam>
 /// <typeparam name="TResponse">The type of the response.</typeparam>
 public interface ICommandHandler<in TCommand, TResponse> : IRequestHandler<TCommand, TResponse>
-    where TCommand : ICommand<TResponse>
-{
-}
+    where TCommand : ICommand<TResponse>;

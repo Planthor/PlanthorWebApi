@@ -1,6 +1,6 @@
 ﻿using System.Collections.Generic;
 
-namespace PlanthorWebApi.Domain;
+namespace PlanthorWebApi.Domain.Shared;
 
 /// <summary>
 /// Represents an aggregate root in the domain model.
