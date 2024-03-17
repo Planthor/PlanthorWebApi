@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Threading;
 using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
-using PlanthorWebApi.Domain;
+using PlanthorWebApi.Domain.Shared;
 
 namespace PlanthorWebApi.Infrastructure;
 

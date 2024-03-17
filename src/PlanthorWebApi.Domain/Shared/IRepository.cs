@@ -2,7 +2,7 @@ using System.Collections.Generic;
 using System.Threading;
 using System.Threading.Tasks;
 
-namespace PlanthorWebApi.Domain;
+namespace PlanthorWebApi.Domain.Shared;
 
 /// <summary>
 /// Represents a generic repository interface for managing aggregate roots.
