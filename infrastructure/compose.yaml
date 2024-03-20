@@ -7,7 +7,7 @@ services:
     image: mongo:7
     environment:
       - MONGO_INITDB_ROOT_USERNAME=admin
-      - MONGO_INITDB_ROOT_PASSWORD=planthor_123
+      - MONGO_INITDB_ROOT_PASSWORD=Planthor_123
       - MONGO_INITDB_DATABASE=planthordb
     ports:
       - 27017:27017
@@ -19,8 +19,8 @@ services:
     image: mongo-express:latest
     environment:
       - ME_CONFIG_MONGODB_ADMINUSERNAME=admin
-      - ME_CONFIG_MONGODB_ADMINPASSWORD=planthor_123
-      - ME_CONFIG_MONGODB_URL=mongodb://admin:planthor_123@mongodb:27017/
+      - ME_CONFIG_MONGODB_ADMINPASSWORD=Planthor_123
+      - ME_CONFIG_MONGODB_URL=mongodb://admin:Planthor_123@mongodb:27017/
     ports:
       - 8081:8081
     depends_on:
