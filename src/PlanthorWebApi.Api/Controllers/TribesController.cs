@@ -9,15 +9,15 @@ namespace PlanthorWebApi.Api.Controllers;
 
 [ApiController]
 [Route("[controller]")]
-public class TribesController(IMediator mediator) : ControllerBase
+public class TribesController(ISender sender) : ControllerBase
 {
-    private readonly IMediator _mediator = mediator
-        ?? throw new ArgumentNullException(nameof(mediator));
+    private readonly ISender _sender = sender
+        ?? throw new ArgumentNullException(nameof(sender));
 
     [HttpPost]
     public async Task<ActionResult<TribeDto>> CreateTribe(CreateTribeCommand command, CancellationToken token)
     {
-        var tribeDto = await _mediator.Send(command, token);
+        var tribeDto = await _sender.Send(command, token);
         return Ok(tribeDto);
     }
 }
