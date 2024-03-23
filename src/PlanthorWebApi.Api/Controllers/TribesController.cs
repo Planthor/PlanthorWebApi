@@ -1,6 +1,7 @@
 using System;
 using System.Threading;
 using System.Threading.Tasks;
+using FluentValidation;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
 using PlanthorWebApi.Application;
@@ -11,9 +12,12 @@ namespace PlanthorWebApi.Api.Controllers;
 /// Controller for handling requests related to Tribes.
 /// </summary>
 /// <param name="sender">The sender used to send requests.</param>
+/// <param name="validator">The validator used to validate the create tribe command.</param>
 [ApiController]
 [Route("[controller]")]
-public class TribesController(ISender sender) : ControllerBase
+public class TribesController(
+    ISender sender,
+    IValidator<CreateTribeCommand> validator) : ControllerBase
 {
     private readonly ISender _sender = sender
         ?? throw new ArgumentNullException(nameof(sender));
@@ -30,6 +34,7 @@ public class TribesController(ISender sender) : ControllerBase
     [HttpPost]
     public async Task<ActionResult<TribeDto>> Create(CreateTribeCommand command, CancellationToken token)
     {
+        await validator.ValidateAndThrowAsync(command, token);
         var tribeDto = await _sender.Send(command, token);
         return Ok(tribeDto);
     }
