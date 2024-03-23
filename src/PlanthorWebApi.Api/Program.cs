@@ -1,9 +1,9 @@
 ﻿using System;
-using MediatR;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
+using PlanthorWebApi.Application;
 using Serilog;
 
 Log.Logger = new LoggerConfiguration()
@@ -25,6 +25,15 @@ try
         config.ReadFrom.Configuration(builder.Configuration);
     });
 
+    builder.Services.AddMediatR(cfg =>
+    {
+        var mediatRAssemblies = new[]
+        {
+            typeof(CreateTribeCommand).Assembly
+        };
+        cfg.RegisterServicesFromAssemblies(mediatRAssemblies);
+    });
+
     var app = builder.Build();
 
     if (app.Environment.IsDevelopment())
@@ -37,6 +46,8 @@ try
         // Available at: http://localhost:<port>/swagger
         app.UseSwaggerUi();
     }
+
+    app.MapControllers();
 
     app.Logger.LogInformation("The app started.");
     app.Run();

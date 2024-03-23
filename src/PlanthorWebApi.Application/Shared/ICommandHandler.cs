@@ -3,7 +3,7 @@ using MediatR;
 namespace PlanthorWebApi.Application.Shared;
 
 /// <summary>
-/// Represents a handler for a command that produces a response.
+/// Represents a handler for a <seealso cref="TCommand"/> command that produces a response.
 /// https://code-maze.com/cqrs-mediatr-fluentvalidation/
 /// </summary>
 /// <typeparam name="TCommand">The type of the command.</typeparam>
