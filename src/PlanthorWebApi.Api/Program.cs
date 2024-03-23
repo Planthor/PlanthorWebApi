@@ -1,9 +1,10 @@
 ﻿using System;
-using MediatR;
+using FluentValidation;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
-using Microsoft.Extensions.Logging;
+using PlanthorWebApi.Application;
+using PlanthorWebApi.Application.Tribes.Commands.Create;
 using Serilog;
 
 Log.Logger = new LoggerConfiguration()
@@ -17,12 +18,19 @@ try
     var builder = WebApplication.CreateBuilder(args);
 
     builder.Services.AddControllers();
+    builder.Services.AddScoped<IValidator<CreateTribeCommand>, CreateTribeCommandValidator>();
     builder.Services.AddEndpointsApiExplorer();
     builder.Services.AddOpenApiDocument();
 
-    builder.Host.UseSerilog((_, config) =>
+    builder.Host.UseSerilog();
+
+    builder.Services.AddMediatR(cfg =>
     {
-        config.ReadFrom.Configuration(builder.Configuration);
+        var mediatRAssemblies = new[]
+        {
+            typeof(CreateTribeCommand).Assembly
+        };
+        cfg.RegisterServicesFromAssemblies(mediatRAssemblies);
     });
 
     var app = builder.Build();
@@ -38,7 +46,9 @@ try
         app.UseSwaggerUi();
     }
 
-    app.Logger.LogInformation("The app started.");
+    app.MapControllers();
+
+    Log.Information("The app started.");
     app.Run();
 }
 catch (InvalidOperationException ex)  // Catch specific exception
@@ -54,4 +64,3 @@ finally
 {
     Log.CloseAndFlush();
 }
-
