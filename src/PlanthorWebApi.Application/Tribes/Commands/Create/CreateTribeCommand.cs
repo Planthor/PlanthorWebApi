@@ -7,4 +7,4 @@ namespace PlanthorWebApi.Application;
 /// </summary>
 /// <param name="Name">The name of the tribe.</param>
 /// <param name="Description">The description of the tribe.</param>
-public record CreateTribeCommand(string Name, string Description) : ICommand<TribeDto>;
+public record CreateTribeCommand(string Name, string? Description) : ICommand<TribeDto>;
