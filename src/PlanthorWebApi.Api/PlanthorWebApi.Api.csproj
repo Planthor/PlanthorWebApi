@@ -10,5 +10,7 @@
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\PlanthorWebApi.Application\PlanthorWebApi.Application.csproj" />
+    <ProjectReference
+      Include="..\PlanthorWebApi.Infrastructure\PlanthorWebApi.Infrastructure.csproj" />
   </ItemGroup>
 </Project>
