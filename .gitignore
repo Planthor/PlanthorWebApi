@@ -628,6 +628,10 @@ StyleCopReport.xml
 coverage*.json
 coverage*.xml
 coverage*.info
+.CodeCoverageResults/*
+.CombinedResults/*
+.IntegrationTestResults/*
+.UnitTestResults/*
 
 # NuGet Packages
 # NuGet Symbol Packages
