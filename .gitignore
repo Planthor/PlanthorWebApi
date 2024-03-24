@@ -586,6 +586,7 @@ $RECYCLE.BIN/
 
 # Mono auto generated files
 mono_crash.*
+.mono
 
 # Build results
 [Ww][Ii][Nn]32/

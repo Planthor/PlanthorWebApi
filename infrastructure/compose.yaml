@@ -1,8 +1,7 @@
-version: '3.8'
+﻿version: "3.8"
 name: planthor-webapi-infrastructure
 
 services:
-
   mongodb:
     image: mongo:7
     environment:
@@ -27,4 +26,4 @@ services:
       - mongodb
 
 volumes:
-    mongodb-data:
+  mongodb-data:

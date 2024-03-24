@@ -29,19 +29,21 @@ jobs:
             ${{ runner.os }}-dotnet-
 
       - name: Restore dependencies
-        run: dotnet restore
+        run: |
+          dotnet restore
+          dotnet tool restore
 
       - name: Run coverage code 
         run: |
-          dotnet tool install --global dotnet-coverage
+          dotnet tool install --global coverlet.console
           dotnet build --no-incremental
-          dotnet-coverage collect "dotnet test" -f xml -o "coverage.xml"
+          dotnet test --results-directory ./coverage-report --collect:"XPlat Code Coverage" /p:CollectCoverage=true /p:CoverletOutputFormat=lcov
 
       - name: Upload coverage report
         uses: actions/upload-artifact@v4
         with:
           name: coverage-report
-          path: ./coverage.xml
+          path: ./coverage-report/*/coverage.cobertura.xml
 
   sonar-scan:
     name: Run SonarScanner
@@ -84,18 +86,17 @@ jobs:
           name: coverage-report
           path: ./coverage-report
 
-      - name: Restore dependencies
+      - name: Sonarqube Analytis
         run: |
+          mv -f  ./coverage-report/*/coverage.cobertura.xml ./coverage-report/coverage.cobertura.xml
           dotnet tool install --global dotnet-sonarscanner
-
           dotnet sonarscanner begin \
-          /k:"Planthor_PlanthorIdentityServer" \
+          /k:"Planthor_PlanthorWebApi" \
           /o:"planthor" \
           /d:sonar.token="${{ secrets.SONAR_TOKEN }}" \
           /d:sonar.host.url="https://sonarcloud.io" \
-          /d:sonar.exclusions="src/*/wwwroot/lib"  
-          
+          /d:sonar.exclusions="src/*/wwwroot/lib" \
+          /d:sonar.cs.opencover.reportsPaths=./coverage-report/coverage.cobertura.xml
           dotnet restore
           dotnet build --no-incremental
-
           dotnet sonarscanner end /d:sonar.token="${{ secrets.SONAR_TOKEN }}"

@@ -10,7 +10,7 @@
     }
   },
   //export ports for devcontainer to containers
-  "forwardPorts": [5000, 5001, 5432, 8888],
+  "forwardPorts": [5000, 5001, 27017, 8081],
   "postCreateCommand": ".devcontainer/scripts/postCreateCommand.sh",
   "remoteUser": "vscode"
 }

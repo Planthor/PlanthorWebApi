@@ -10,34 +10,30 @@ services:
       - ..:/workspace/planthorwebapi:cached
     command: sleep infinity
     user: vscode
-    # depends_on:
-    #   - postgresql
+    depends_on:
+      - mongodb
+  mongodb:
+    image: mongo:7
+    environment:
+      - MONGO_INITDB_ROOT_USERNAME=admin
+      - MONGO_INITDB_ROOT_PASSWORD=Planthor_123
+      - MONGO_INITDB_DATABASE=planthordb
+    ports:
+      - 27017:27017
+    volumes:
+      - ./mongodb/create_db.js:/docker-entrypoint-initdb.d/create_db.js:ro
+      - mongodb-data:/data/db
 
-  # postgresql:
-  #   image: postgres:16
-  #   restart: always
-  #   environment:
-  #     POSTGRES_USER: planthor-admin
-  #     POSTGRES_PASSWORD: Planthor@123
-  #     POSTGRES_DB: PLANTHOR_IDENTITY
-  #   volumes:
-  #     - local-pgdata:/var/lib/postgresql/data
-  #   ports:
-  #     - 5432:5432
+  mongo-express:
+    image: mongo-express:latest
+    environment:
+      - ME_CONFIG_MONGODB_ADMINUSERNAME=admin
+      - ME_CONFIG_MONGODB_ADMINPASSWORD=Planthor_123
+      - ME_CONFIG_MONGODB_URL=mongodb://admin:Planthor_123@mongodb:27017/
+    ports:
+      - 8081:8081
+    depends_on:
+      - mongodb
 
-  # pgadmin:
-  #   image: dpage/pgadmin4:8
-  #   restart: always
-  #   environment:
-  #     PGADMIN_DEFAULT_EMAIL: planthor-admin@planthor.com
-  #     PGADMIN_DEFAULT_PASSWORD: Planthor@123
-  #   volumes:
-  #     - pgadmin-data:/var/lib/pgadmin
-  #   depends_on:
-  #     - postgresql
-  #   ports:
-  #     - 8888:80
-
-# volumes:
-#   local-pgdata:
-#   pgadmin-data: 
+volumes:
+    mongodb-data:
