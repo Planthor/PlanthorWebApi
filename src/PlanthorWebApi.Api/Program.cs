@@ -22,6 +22,7 @@ try
 
     // Infrastructure
     builder.Host.UseSerilog();
+
     builder.Services.AddPlanthorDbContext(
         builder.Configuration.GetConnectionString("PlanthorDbContext")
             ?? throw new InvalidOperationException("PlanthorDbContext is not set in the configuration file."));

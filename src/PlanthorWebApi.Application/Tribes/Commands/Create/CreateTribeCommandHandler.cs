@@ -30,9 +30,6 @@ internal sealed class CreateTribeCommandHandler(
         };
 
         var result = await tribes.AddAsync(newTribe, cancellationToken);
-
-        logger.LogInformation("new TribeId: {TribeId}", result.Id);
-
         return result.Id;
     }
 }

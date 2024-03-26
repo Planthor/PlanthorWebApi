@@ -11,11 +11,11 @@ namespace PlanthorWebApi.Infrastructure;
 /// Represents a base repository implementation for a specific aggregate root type.
 /// </summary>
 /// <typeparam name="TAggregateRoot">The type of the aggregate root.</typeparam>
-/// <param name="dbContext">The DbContext instance to use for database access.</param>
-public class BaseRepository<TAggregateRoot>(DbContext dbContext) : IRepository<TAggregateRoot>
+/// <param name="dbContext">The PlanthorDbContext instance to use for database access.</param>
+public class BaseRepository<TAggregateRoot>(PlanthorDbContext dbContext) : IRepository<TAggregateRoot>
     where TAggregateRoot : class, IAggregateRoot
 {
-    private readonly DbContext _dbContext = dbContext
+    private readonly PlanthorDbContext _dbContext = dbContext
         ?? throw new ArgumentNullException(nameof(dbContext));
 
     /// <summary>

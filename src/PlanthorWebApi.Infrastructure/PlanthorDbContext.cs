@@ -1,9 +1,23 @@
+using System;
 using Microsoft.EntityFrameworkCore;
 using PlanthorWebApi.Domain;
 
 namespace PlanthorWebApi.Infrastructure;
 
-class PlanthorDbContext : DbContext
+/// <summary>
+/// Represents the database context for the Planthor application.
+/// </summary>
+/// <param name="options">The options to be used by a <see cref="DbContext"/>.</param>
+public class PlanthorDbContext(DbContextOptions options) : DbContext(options)
 {
-    public DbSet<Tribe> Movies { get; init; }
+    public DbSet<Tribe> Tribes { get; init; }
+
+    /// <inheritdoc/>
+    protected override void OnModelCreating(ModelBuilder modelBuilder)
+    {
+        ArgumentNullException.ThrowIfNull(modelBuilder);
+
+        base.OnModelCreating(modelBuilder);
+        modelBuilder.ApplyConfigurationsFromAssembly(typeof(PlanthorDbContext).Assembly);
+    }
 }
