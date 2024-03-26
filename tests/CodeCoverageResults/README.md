@@ -22,7 +22,15 @@ The structure of this directory is as follows:
 
 ## View result in html
 
-- Go to code coverage result folder (ex `./tests/CodeCoverageResults/UnitTestResults/30ef8959-ad3e-44bc-bc74-799926bd11cf)
+- Make sure to restore required tool at `PlanthorWebApi.sln` directory with:
+
+```bash
+dotnet tool restore
+```
+
+- Go to code coverage result folder (ex `./tests/CodeCoverageResults/UnitTestResults/30ef8959-ad3e-44bc-bc74-799926bd11cf`)
+
+- Then type the command:
 
 ``` bash
 dotnet reportgenerator -reports:"coverage.cobertura.xml" -targetdir:"." -reporttypes:"MarkdownSummary"

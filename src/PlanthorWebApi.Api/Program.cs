@@ -1,10 +1,13 @@
 ﻿using System;
 using FluentValidation;
 using Microsoft.AspNetCore.Builder;
+using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using PlanthorWebApi.Application;
 using PlanthorWebApi.Application.Tribes.Commands.Create;
+using PlanthorWebApi.Domain.Shared;
+using PlanthorWebApi.Infrastructure;
 using Serilog;
 
 Log.Logger = new LoggerConfiguration()
@@ -17,12 +20,20 @@ try
     Log.Information("Starting web application");
     var builder = WebApplication.CreateBuilder(args);
 
+    // Infrastructure
+    builder.Host.UseSerilog();
+
+    builder.Services.AddPlanthorDbContext(
+        builder.Configuration.GetConnectionString("PlanthorDbContext")
+            ?? throw new InvalidOperationException("PlanthorDbContext is not set in the configuration file."));
+
+    builder.Services.AddScoped(typeof(IRepository<>), typeof(BaseRepository<>));
+
+    // API Client
     builder.Services.AddControllers();
     builder.Services.AddScoped<IValidator<CreateTribeCommand>, CreateTribeCommandValidator>();
     builder.Services.AddEndpointsApiExplorer();
     builder.Services.AddOpenApiDocument();
-
-    builder.Host.UseSerilog();
 
     builder.Services.AddMediatR(cfg =>
     {

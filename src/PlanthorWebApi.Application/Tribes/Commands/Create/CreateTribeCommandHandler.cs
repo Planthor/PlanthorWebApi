@@ -3,6 +3,8 @@ using System.Threading;
 using System.Threading.Tasks;
 using Microsoft.Extensions.Logging;
 using PlanthorWebApi.Application.Shared;
+using PlanthorWebApi.Domain;
+using PlanthorWebApi.Domain.Shared;
 
 namespace PlanthorWebApi.Application.Tribes.Commands.Create;
 
@@ -10,19 +12,24 @@ namespace PlanthorWebApi.Application.Tribes.Commands.Create;
 /// Handles the creation of a new <see cref="Tribe"/>.
 /// </summary>
 /// <param name="logger">The logger used to log information.</param>
-internal sealed class CreateTribeCommandHandler(ILogger<CreateTribeCommandHandler> logger)
-    : ICommandHandler<CreateTribeCommand, TribeDto>
+/// <param name="tribes">The repository of tribes.</param>
+internal sealed class CreateTribeCommandHandler(
+    ILogger<CreateTribeCommandHandler> logger,
+    IRepository<Tribe> tribes)
+    : ICommandHandler<CreateTribeCommand, Guid>
 {
     /// <inheritdoc/>
-    public Task<TribeDto> Handle(CreateTribeCommand request, CancellationToken cancellationToken)
+    public async Task<Guid> Handle(CreateTribeCommand request, CancellationToken cancellationToken)
     {
         logger.LogInformation("CreateTribeCommandHandler - Handle - Start");
-        var tribeDto = new TribeDto(
-            Guid.NewGuid(),
-            request.Name,
-            request.Description);
 
-        logger.LogInformation("TribeDto: {@TribeDto}", tribeDto);
-        return Task.FromResult(tribeDto);
+        var newTribe = new Tribe
+        {
+            Name = request.Name,
+            Description = request.Description
+        };
+
+        var result = await tribes.AddAsync(newTribe, cancellationToken);
+        return result.Id;
     }
 }

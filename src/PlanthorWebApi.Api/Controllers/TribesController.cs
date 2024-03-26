@@ -29,13 +29,13 @@ public class TribesController(
     /// <param name="token">A cancellation token that can be used to cancel the work.</param>
     /// <returns>
     /// A task that represents the asynchronous operation.
-    /// The task result contains the ActionResult of <see cref="TribeDto"/>.
+    /// The task result contains the ActionResult of <see cref="Guid"/>.
     /// </returns>
     [HttpPost]
-    public async Task<ActionResult<TribeDto>> Create(CreateTribeCommand command, CancellationToken token)
+    public async Task<ActionResult<Guid>> Create(CreateTribeCommand command, CancellationToken token)
     {
         await validator.ValidateAndThrowAsync(command, token);
-        var tribeDto = await _sender.Send(command, token);
-        return Ok(tribeDto);
+        var newTribeGuid = await _sender.Send(command, token);
+        return Ok(newTribeGuid);
     }
 }
