@@ -2,7 +2,6 @@ using System;
 using System.Collections.Generic;
 using System.Threading;
 using System.Threading.Tasks;
-using Microsoft.EntityFrameworkCore;
 using PlanthorWebApi.Domain.Shared;
 
 namespace PlanthorWebApi.Infrastructure;
@@ -12,7 +11,7 @@ namespace PlanthorWebApi.Infrastructure;
 /// </summary>
 /// <typeparam name="TAggregateRoot">The type of the aggregate root.</typeparam>
 /// <param name="dbContext">The PlanthorDbContext instance to use for database access.</param>
-public class BaseRepository<TAggregateRoot>(PlanthorDbContext dbContext) : IRepository<TAggregateRoot>
+public sealed class BaseWriteRepository<TAggregateRoot>(PlanthorDbContext dbContext) : IWriteRepository<TAggregateRoot>
     where TAggregateRoot : class, IAggregateRoot
 {
     private readonly PlanthorDbContext _dbContext = dbContext

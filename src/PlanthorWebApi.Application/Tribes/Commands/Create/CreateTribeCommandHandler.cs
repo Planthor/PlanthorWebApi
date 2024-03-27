@@ -15,7 +15,7 @@ namespace PlanthorWebApi.Application.Tribes.Commands.Create;
 /// <param name="tribes">The repository of tribes.</param>
 internal sealed class CreateTribeCommandHandler(
     ILogger<CreateTribeCommandHandler> logger,
-    IRepository<Tribe> tribes)
+    IWriteRepository<Tribe> tribes)
     : ICommandHandler<CreateTribeCommand, Guid>
 {
     /// <inheritdoc/>

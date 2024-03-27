@@ -8,7 +8,7 @@ namespace PlanthorWebApi.Domain.Shared;
 /// Represents a generic repository interface for managing aggregate roots.
 /// </summary>
 /// <typeparam name="TAggregateRoot">The type of the aggregate root.</typeparam>
-public interface IRepository<TAggregateRoot> where TAggregateRoot : IAggregateRoot
+public interface IWriteRepository<TAggregateRoot> where TAggregateRoot : IAggregateRoot
 {
     /// <summary>
     /// Adds a new aggregate root asynchronously.
