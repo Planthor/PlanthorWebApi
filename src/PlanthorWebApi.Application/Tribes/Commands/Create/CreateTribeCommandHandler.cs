@@ -15,13 +15,13 @@ namespace PlanthorWebApi.Application.Tribes.Commands.Create;
 /// <param name="tribes">The repository of tribes.</param>
 internal sealed class CreateTribeCommandHandler(
     ILogger<CreateTribeCommandHandler> logger,
-    IRepository<Tribe> tribes)
+    IWriteRepository<Tribe> tribes)
     : ICommandHandler<CreateTribeCommand, Guid>
 {
     /// <inheritdoc/>
     public async Task<Guid> Handle(CreateTribeCommand request, CancellationToken cancellationToken)
     {
-        logger.LogInformation("CreateTribeCommandHandler - Handle - Start");
+        logger.LogInformation("CreateTribeCommand - Handle - Start");
 
         var newTribe = new Tribe
         {

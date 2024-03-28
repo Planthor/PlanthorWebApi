@@ -4,7 +4,7 @@ using PlanthorWebApi.Domain.Shared;
 
 namespace PlanthorWebApi.Domain;
 
-public class Tribe : IAggregateRoot
+public class Tribe : IAggregateRoot, IEntity
 {
     public static readonly int MaxNameLength = 128;
     public static readonly int MaxDescriptionLength = 3000;

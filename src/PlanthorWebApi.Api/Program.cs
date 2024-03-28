@@ -6,8 +6,10 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using PlanthorWebApi.Application;
 using PlanthorWebApi.Application.Tribes.Commands.Create;
+using PlanthorWebApi.Application.Tribes.Queries.Details;
 using PlanthorWebApi.Domain.Shared;
 using PlanthorWebApi.Infrastructure;
+using PlanthorWebApi.Infrastructure.Repositories;
 using Serilog;
 
 Log.Logger = new LoggerConfiguration()
@@ -27,11 +29,13 @@ try
         builder.Configuration.GetConnectionString("PlanthorDbContext")
             ?? throw new InvalidOperationException("PlanthorDbContext is not set in the configuration file."));
 
-    builder.Services.AddScoped(typeof(IRepository<>), typeof(BaseRepository<>));
+    builder.Services.AddScoped(typeof(IWriteRepository<>), typeof(BaseWriteRepository<>));
+    builder.Services.AddScoped(typeof(IReadRepository<>), typeof(BaseReadRepository<>));
 
     // API Client
     builder.Services.AddControllers();
     builder.Services.AddScoped<IValidator<CreateTribeCommand>, CreateTribeCommandValidator>();
+    builder.Services.AddScoped<IValidator<TribeDetailsQuery>, TribeDetailsQueryValidator>();
     builder.Services.AddEndpointsApiExplorer();
     builder.Services.AddOpenApiDocument();
 
@@ -39,7 +43,8 @@ try
     {
         var mediatRAssemblies = new[]
         {
-            typeof(CreateTribeCommand).Assembly
+            typeof(CreateTribeCommand).Assembly,
+            typeof(TribeDetailsQuery).Assembly
         };
         cfg.RegisterServicesFromAssemblies(mediatRAssemblies);
     });
