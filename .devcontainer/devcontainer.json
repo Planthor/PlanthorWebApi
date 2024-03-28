@@ -1,0 +1,16 @@
+{
+  "name": "planthorwebapi-ws",
+  "dockerComposeFile": "docker-compose.yml",
+  "service": "planthorwebapi",
+  "workspaceFolder": "/workspace/planthorwebapi",
+  "customizations": {
+    "vscode": {
+      "extensions": [
+        "ms-dotnettools.csharp", "ms-dotnettools.csdevkit"]
+    }
+  },
+  //export ports for devcontainer to containers
+  "forwardPorts": [5000, 5001, 27017, 8081],
+  "postCreateCommand": ".devcontainer/scripts/postCreateCommand.sh",
+  "remoteUser": "vscode"
+}
