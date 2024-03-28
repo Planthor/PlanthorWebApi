@@ -425,6 +425,7 @@ Temporary Items
 #Mono Project Files
 *.resources
 test-results/
+.mono/
 
 ### NotepadPP ###
 # Notepad++ backups #
@@ -736,3 +737,6 @@ FodyWeavers.xsd
 
 # git config
 .gitconfig
+
+# CI reports 
+coverage-report/
