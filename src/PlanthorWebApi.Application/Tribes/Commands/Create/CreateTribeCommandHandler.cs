@@ -21,7 +21,7 @@ internal sealed class CreateTribeCommandHandler(
     /// <inheritdoc/>
     public async Task<Guid> Handle(CreateTribeCommand request, CancellationToken cancellationToken)
     {
-        logger.LogInformation("CreateTribeCommandHandler - Handle - Start");
+        logger.LogInformation("CreateTribeCommand - Handle - Start");
 
         var newTribe = new Tribe
         {

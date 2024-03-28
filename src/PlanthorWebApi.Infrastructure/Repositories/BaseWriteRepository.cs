@@ -4,7 +4,7 @@ using System.Threading;
 using System.Threading.Tasks;
 using PlanthorWebApi.Domain.Shared;
 
-namespace PlanthorWebApi.Infrastructure;
+namespace PlanthorWebApi.Infrastructure.Repositories;
 
 /// <summary>
 /// Represents a base repository implementation for a specific aggregate root type.

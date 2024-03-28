@@ -22,8 +22,8 @@ public interface IReadRepository<TEntity> where TEntity : IEntity
     /// <summary>
     /// Gets all entities that match the specified filter.
     /// </summary>
-    /// <param name="filter">A function to test each entity for a condition. Null to get all entities.</param>
+    /// <param name="predicate">A function to test each entity for a condition. Null to get all entities.</param>
     /// <param name="cancellationToken">A token that can be used to request cancellation of the asynchronous operation.</param>
     /// <returns>A task that represents the asynchronous operation. The task result contains a list of entities that match the filter.</returns>
-    Task<IList<TEntity>> GetAllAsync(Func<TEntity, bool>? filter, CancellationToken cancellationToken);
+    Task<IList<TEntity>> GetAllAsync(Func<TEntity, bool>? predicate, CancellationToken cancellationToken);
 }
