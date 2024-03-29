@@ -9,12 +9,12 @@ on:
 jobs:
 
   coverage:
-    name: Run Coverage 
+    name: Run Coverage
     runs-on: ubuntu-22.04
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
-        
+
       - name: Setup .NET
         uses: actions/setup-dotnet@v4
         with:
@@ -33,27 +33,22 @@ jobs:
           dotnet restore
           dotnet tool restore
 
-      - name: Run coverage code 
+      - name: Run coverage code
         run: |
-          dotnet tool install --global coverlet.console
           dotnet build --no-incremental
-          # Coverlet report for sonarqube
-          coverlet tests/UnitTests/PlanthorWebApi.Application.Tests/bin/Debug/net8.0/PlanthorWebApi.Application.dll \
-            --target "dotnet" \
-            --targetargs 'test --no-build  --results-directory ./coverage-report --collect:"XPlat Code Coverage"' \
-            -f=opencover \
-            -o="./coverage-report/coverage.xml"
-          dotnet reportgenerator -reports:"./coverage-report/*/coverage.cobertura.xml" -targetdir:"./coverage-report" -reporttypes:"MarkdownSummary"
+          # Coverlet report for Sonar
+          dotnet test --no-build --results-directory ./coverage-report/ --collect:"XPlat Code Coverage;Format=lcov,opencover"
+          dotnet reportgenerator -reports:"coverage-report/**/coverage.opencover.xml" -targetdir:"./coverage-report/" -reporttypes:"MarkdownSummary"
 
       - name: Upload coverage report
         uses: actions/upload-artifact@v4
         with:
           name: coverage-report
           path: ./coverage-report/*
-      
-      - name: Code coverage summarize 
+
+      - name: Code coverage summarize
         run : |
-          echo "$(cat coverage-report/Summary.md)" >> $GITHUB_STEP_SUMMARY 
+          echo "$(cat coverage-report/Summary.md)" >> $GITHUB_STEP_SUMMARY
 
   sonar-scan:
     name: Run SonarScanner
@@ -96,7 +91,7 @@ jobs:
           name: coverage-report
           path: ./coverage-report
 
-      - name: Sonarqube Analytis
+      - name: Sonar Analytics
         run: |
           dotnet tool install --global dotnet-sonarscanner
           dotnet sonarscanner begin \
@@ -105,7 +100,7 @@ jobs:
           /d:sonar.token="${{ secrets.SONAR_TOKEN }}" \
           /d:sonar.host.url="https://sonarcloud.io" \
           /d:sonar.exclusions="src/*/wwwroot/lib" \
-          /d:sonar.cs.opencover.reportsPaths=coverage-report/coverage.xml
+          /d:sonar.cs.opencover.reportsPaths=coverage-report/**/coverage.opencover.xml
           dotnet restore
           dotnet build --no-incremental
           dotnet sonarscanner end /d:sonar.token="${{ secrets.SONAR_TOKEN }}"
