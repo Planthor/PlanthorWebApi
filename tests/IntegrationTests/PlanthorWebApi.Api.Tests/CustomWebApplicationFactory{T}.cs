@@ -10,9 +10,15 @@ using PlanthorWebApi.Infrastructure;
 
 namespace PlanthorWebApi.Api.Tests;
 
+/// <summary>
+/// A factory for creating instances of the web application for integration testing.
+/// This factory customizes the application's services for testing purposes.
+/// </summary>
+/// <typeparam name="TProgram">The type of the entry point class for the application.</typeparam>
 public class CustomWebApplicationFactory<TProgram>
     : WebApplicationFactory<TProgram> where TProgram : class
 {
+    /// <inheritdoc/>
     protected override void ConfigureWebHost(IWebHostBuilder builder)
     {
         ArgumentNullException.ThrowIfNull(builder);
