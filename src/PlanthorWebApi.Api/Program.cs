@@ -80,3 +80,9 @@ finally
 {
     Log.CloseAndFlush();
 }
+
+// Make the implicit Program.cs class public, so integration tests can reference the correct assembly for host building
+public partial class Program
+{
+    protected Program() { }
+}
