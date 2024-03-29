@@ -4,12 +4,12 @@ using System.Linq;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Mvc.Testing;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Diagnostics;
 using Microsoft.Extensions.DependencyInjection;
 using PlanthorWebApi.Infrastructure;
 
 namespace PlanthorWebApi.Api.Tests;
 
-// TODO - Trung: Make use of this class to override to different MongoDB for testing rather than prod db.
 public class CustomWebApplicationFactory<TProgram>
     : WebApplicationFactory<TProgram> where TProgram : class
 {
@@ -35,7 +35,11 @@ public class CustomWebApplicationFactory<TProgram>
                 services.Remove(dbConnectionDescriptor);
             }
 
-            // TODO - Trung: Add Test Db and the rest of required services here.
+            services.AddDbContext<PlanthorDbContext>(options =>
+            {
+                options.UseInMemoryDatabase("PlanthorInMemoryDb");
+                options.ConfigureWarnings(warning => warning.Ignore(InMemoryEventId.TransactionIgnoredWarning));
+            });
         });
     }
 }
