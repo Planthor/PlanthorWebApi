@@ -25,6 +25,12 @@ TODO: Add details feature to WebApi
 git clone https://github.com/Planthor/PlanthorWebApi.git
 ```
 
+## Run Unit + Integration Tests
+
+```bash
+dotnet test --results-directory ./tests/CodeCoverageResults/CombinedResults --collect:"XPlat Code Coverage;Format=lcov,opencover"
+```
+
 ## Documentation
 
 Please check WIKI for more documentation.
