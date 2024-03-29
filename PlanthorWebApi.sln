@@ -19,6 +19,10 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "UnitTests", "UnitTests", "{
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PlanthorWebApi.Application.Tests", "tests\UnitTests\PlanthorWebApi.Application.Tests\PlanthorWebApi.Application.Tests.csproj", "{6D6B483F-A2FA-48BA-9398-76ECA0F260F6}"
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "IntegrationTests", "IntegrationTests", "{22665C96-0078-442E-8196-01945B1CB31B}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PlanthorWebApi.Api.Tests", "tests\IntegrationTests\PlanthorWebApi.Api.Tests\PlanthorWebApi.Api.Tests.csproj", "{5E916455-0E0A-4FD8-BB8F-669A6934C4E3}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -45,6 +49,10 @@ Global
 		{6D6B483F-A2FA-48BA-9398-76ECA0F260F6}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{6D6B483F-A2FA-48BA-9398-76ECA0F260F6}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{6D6B483F-A2FA-48BA-9398-76ECA0F260F6}.Release|Any CPU.Build.0 = Release|Any CPU
+		{5E916455-0E0A-4FD8-BB8F-669A6934C4E3}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{5E916455-0E0A-4FD8-BB8F-669A6934C4E3}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{5E916455-0E0A-4FD8-BB8F-669A6934C4E3}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{5E916455-0E0A-4FD8-BB8F-669A6934C4E3}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -56,5 +64,7 @@ Global
 		{FB503574-5369-43AD-A0DE-38A336948200} = {EC7E7B89-0D57-4E57-ACCB-A86411E40436}
 		{BDF31F6C-EEEA-4B1F-95B0-1AEAE33DA2C6} = {06C1DBB2-6872-44C3-8387-383CF1E78E1C}
 		{6D6B483F-A2FA-48BA-9398-76ECA0F260F6} = {BDF31F6C-EEEA-4B1F-95B0-1AEAE33DA2C6}
+		{22665C96-0078-442E-8196-01945B1CB31B} = {06C1DBB2-6872-44C3-8387-383CF1E78E1C}
+		{5E916455-0E0A-4FD8-BB8F-669A6934C4E3} = {22665C96-0078-442E-8196-01945B1CB31B}
 	EndGlobalSection
 EndGlobal
