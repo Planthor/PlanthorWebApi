@@ -1,4 +1,4 @@
-name: Dot NET CI Workflow 
+name: Dotnet CI Workflow
 
 on:
   push:
@@ -19,7 +19,7 @@ jobs:
         uses: actions/setup-dotnet@v4
         with:
           dotnet-version: 8.x
-      
+
       - name: Cache .NET packages
         uses: actions/cache@v4
         with:
