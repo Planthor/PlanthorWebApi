@@ -8,7 +8,7 @@ on:
 
 jobs:
   dotnet-build:
-    name: Run build dot Net project
+    name: Run build dotnet project
     runs-on: ubuntu-latest
 
     steps:
