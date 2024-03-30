@@ -29,7 +29,7 @@ git clone https://github.com/Planthor/PlanthorWebApi.git
 ## Run Unit + Integration Tests
 
 ```bash
-dotnet test --results-directory ./tests/CodeCoverageResults/CombinedResults --collect:"XPlat Code Coverage;Format=lcov,opencover"
+dotnet test --results-directory ./tests/CodeCoverageResults --collect:"XPlat Code Coverage;Format=lcov,opencover"
 ```
 
 ## Documentation
