@@ -23,6 +23,8 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "IntegrationTests", "Integra
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PlanthorWebApi.Api.Tests", "tests\IntegrationTests\PlanthorWebApi.Api.Tests\PlanthorWebApi.Api.Tests.csproj", "{5E916455-0E0A-4FD8-BB8F-669A6934C4E3}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PlanthorWebApi.Domain.Tests", "tests\UnitTests\PlanthorWebApi.Domain.Tests\PlanthorWebApi.Domain.Tests.csproj", "{2DA89414-11B9-4AC6-B6CA-47D97599ECB0}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -53,6 +55,10 @@ Global
 		{5E916455-0E0A-4FD8-BB8F-669A6934C4E3}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{5E916455-0E0A-4FD8-BB8F-669A6934C4E3}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{5E916455-0E0A-4FD8-BB8F-669A6934C4E3}.Release|Any CPU.Build.0 = Release|Any CPU
+		{2DA89414-11B9-4AC6-B6CA-47D97599ECB0}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{2DA89414-11B9-4AC6-B6CA-47D97599ECB0}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{2DA89414-11B9-4AC6-B6CA-47D97599ECB0}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{2DA89414-11B9-4AC6-B6CA-47D97599ECB0}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -66,5 +72,6 @@ Global
 		{6D6B483F-A2FA-48BA-9398-76ECA0F260F6} = {BDF31F6C-EEEA-4B1F-95B0-1AEAE33DA2C6}
 		{22665C96-0078-442E-8196-01945B1CB31B} = {06C1DBB2-6872-44C3-8387-383CF1E78E1C}
 		{5E916455-0E0A-4FD8-BB8F-669A6934C4E3} = {22665C96-0078-442E-8196-01945B1CB31B}
+		{2DA89414-11B9-4AC6-B6CA-47D97599ECB0} = {BDF31F6C-EEEA-4B1F-95B0-1AEAE33DA2C6}
 	EndGlobalSection
 EndGlobal
