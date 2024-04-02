@@ -1,7 +1,7 @@
 using System.Collections.Generic;
 using System.Linq;
 
-namespace PlanthorWebApi.Domain;
+namespace PlanthorWebApi.Domain.Shared;
 
 /// <summary>
 /// Represents a base class for value objects.
