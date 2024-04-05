@@ -5,6 +5,8 @@ using FluentValidation;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
 using PlanthorWebApi.Application;
+using PlanthorWebApi.Application.Tribes.Commands.Create;
+using PlanthorWebApi.Application.Tribes.Commands.Update;
 using PlanthorWebApi.Application.Tribes.Queries.Details;
 
 namespace PlanthorWebApi.Api.Controllers;
@@ -15,12 +17,14 @@ namespace PlanthorWebApi.Api.Controllers;
 /// <param name="sender">The sender used to send requests.</param>
 /// <param name="createTribeCommandValidator">The validator used to validate the <see cref="CreateTribeCommand"/>.</param>
 /// <param name="tribeDetailsQueryValidator">The validator used to validate the <see cref="TribeDetailsQuery"/>.</param>
+/// <param name="updateTribeCommandValidator">The validator used to validate the <see cref="UpdateTribeCommand"/>.</param>
 [ApiController]
 [Route("[controller]")]
 public class TribesController(
     ISender sender,
     IValidator<CreateTribeCommand> createTribeCommandValidator,
-    IValidator<TribeDetailsQuery> tribeDetailsQueryValidator)
+    IValidator<TribeDetailsQuery> tribeDetailsQueryValidator,
+    IValidator<UpdateTribeCommand> updateTribeCommandValidator)
     : ControllerBase
 {
     private readonly ISender _sender = sender
@@ -59,5 +63,24 @@ public class TribesController(
         await tribeDetailsQueryValidator.ValidateAndThrowAsync(query, token);
         var tribeDto = await _sender.Send(query, token);
         return Ok(tribeDto);
+    }
+
+    /// <summary>
+    /// Updates a tribe based on the provided information.
+    /// </summary>
+    /// <param name="id">The unique identifier of the tribe to update.</param>
+    /// <param name="command">An object containing the update details for the tribe. (See UpdateTribeCommand class for details)</param>
+    /// <param name="token">A cancellation token that can be used to cancel the asynchronous operation.</param>
+    /// <returns>An empty `204 No Content` response if successful, otherwise an appropriate error response.</returns>
+    [HttpPut("{id}")]
+    public async Task<IActionResult> Update(
+        [FromRoute] Guid id,
+        [FromBody] UpdateTribeCommand command,
+        CancellationToken token)
+    {
+        var updateTribeCommand = command with { Id = id };
+        await updateTribeCommandValidator.ValidateAndThrowAsync(updateTribeCommand, token);
+        await _sender.Send(updateTribeCommand, token);
+        return NoContent();
     }
 }
