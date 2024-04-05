@@ -1,7 +1,7 @@
 using System;
 using PlanthorWebApi.Application.Shared;
 
-namespace PlanthorWebApi.Application;
+namespace PlanthorWebApi.Application.Tribes.Commands.Create;
 
 /// <summary>
 /// Represents a command to create a new tribe.
