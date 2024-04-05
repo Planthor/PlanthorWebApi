@@ -78,6 +78,11 @@ public class TribesController(
         [FromBody] UpdateTribeCommand command,
         CancellationToken token)
     {
+        if (command == null)
+        {
+            return BadRequest();
+        }
+
         var updateTribeCommand = command with { Id = id };
         await updateTribeCommandValidator.ValidateAndThrowAsync(updateTribeCommand, token);
         await _sender.Send(updateTribeCommand, token);
