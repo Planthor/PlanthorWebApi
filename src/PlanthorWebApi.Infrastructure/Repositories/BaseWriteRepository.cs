@@ -1,5 +1,4 @@
 using System;
-using System.Collections.Generic;
 using System.Threading;
 using System.Threading.Tasks;
 using PlanthorWebApi.Domain.Shared;
@@ -31,19 +30,6 @@ public sealed class BaseWriteRepository<TAggregateRoot>(PlanthorDbContext dbCont
     }
 
     /// <summary>
-    /// Adds a range of items to the repository asynchronously.
-    /// </summary>
-    /// <param name="items">The items to add.</param>
-    /// <param name="cancellationToken">The cancellation token.</param>
-    /// <returns>The added items.</returns>
-    public async Task<IEnumerable<TAggregateRoot>> AddRangeAsync(IEnumerable<TAggregateRoot> items, CancellationToken cancellationToken)
-    {
-        _dbContext.Set<TAggregateRoot>().AddRange(items);
-        await SaveChangesAsync(cancellationToken);
-        return items;
-    }
-
-    /// <summary>
     /// Deletes an item from the repository asynchronously.
     /// </summary>
     /// <param name="item">The item to delete.</param>
@@ -51,17 +37,6 @@ public sealed class BaseWriteRepository<TAggregateRoot>(PlanthorDbContext dbCont
     public async Task DeleteAsync(TAggregateRoot item, CancellationToken cancellationToken)
     {
         _dbContext.Set<TAggregateRoot>().Remove(item);
-        await SaveChangesAsync(cancellationToken);
-    }
-
-    /// <summary>
-    /// Deletes a range of items from the repository asynchronously.
-    /// </summary>
-    /// <param name="items">The items to delete.</param>
-    /// <param name="cancellationToken">The cancellation token.</param>
-    public async Task DeleteRangeAsync(IEnumerable<TAggregateRoot> items, CancellationToken cancellationToken)
-    {
-        _dbContext.Set<TAggregateRoot>().RemoveRange(items);
         await SaveChangesAsync(cancellationToken);
     }
 
@@ -83,17 +58,6 @@ public sealed class BaseWriteRepository<TAggregateRoot>(PlanthorDbContext dbCont
     public async Task UpdateAsync(TAggregateRoot item, CancellationToken cancellationToken)
     {
         _dbContext.Set<TAggregateRoot>().Update(item);
-        await SaveChangesAsync(cancellationToken);
-    }
-
-    /// <summary>
-    /// Updates a range of items in the repository asynchronously.
-    /// </summary>
-    /// <param name="items">The items to update.</param>
-    /// <param name="cancellationToken">The cancellation token.</param>
-    public async Task UpdateRangeAsync(IEnumerable<TAggregateRoot> items, CancellationToken cancellationToken)
-    {
-        _dbContext.Set<TAggregateRoot>().UpdateRange(items);
         await SaveChangesAsync(cancellationToken);
     }
 }

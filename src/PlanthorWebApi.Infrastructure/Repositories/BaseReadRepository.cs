@@ -1,6 +1,4 @@
 using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
@@ -17,25 +15,6 @@ public sealed class BaseReadRepository<TEntity>(PlanthorDbContext dbContext)
 {
     private readonly PlanthorDbContext _dbContext = dbContext
         ?? throw new ArgumentNullException(nameof(dbContext));
-
-    /// <inheritdoc/>
-    public async Task<IList<TEntity>> GetAllAsync(
-        Func<TEntity, bool>? predicate,
-        CancellationToken cancellationToken)
-    {
-        if (predicate is null)
-        {
-            return await _dbContext
-                .Set<TEntity>()
-                .ToListAsync(cancellationToken);
-        }
-
-        return await _dbContext
-            .Set<TEntity>()
-            .Where(predicate)
-            .AsQueryable()
-            .ToListAsync(cancellationToken);
-    }
 
     /// <inheritdoc/>
     public async Task<TEntity?> GetByIdAsync(
