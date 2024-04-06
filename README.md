@@ -17,6 +17,7 @@ TODO: Add details feature to WebApi
 
 - .NET 8 SDK or higher
 - NoSQL database (MongoDB, etc.)
+- Docker/Docker Desktop
 
 ## Installation
 
@@ -32,6 +33,22 @@ git clone https://github.com/Planthor/PlanthorWebApi.git
 dotnet test --results-directory ./tests/CodeCoverageResults --collect:"XPlat Code Coverage;Format=lcov,opencover"
 ```
 
+## Start the Planthor Web Api application in local development
+
+### For Windows
+
+1. Start the infrastructure
+
+```bash
+cd .\infrastructure\; docker compose up --build -d
+```
+
+1. Start application with secret
+
+```bash
+$env:ConnectionStrings__PlanthorDbContext = "mongodb://admin:Planthor_123@localhost:27017/"; dotnet build; dotnet run
+```
+
 ## Documentation
 
-Please check WIKI for more documentation.
+Please check WIKI or individual README(s) for more documentation.
