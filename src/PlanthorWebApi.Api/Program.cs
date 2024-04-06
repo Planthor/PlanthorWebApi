@@ -4,7 +4,9 @@ using Microsoft.AspNetCore.Builder;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using NSwag;
 using PlanthorWebApi.Application.Tribes.Commands.Create;
+using PlanthorWebApi.Application.Tribes.Commands.Delete;
 using PlanthorWebApi.Application.Tribes.Commands.Update;
 using PlanthorWebApi.Application.Tribes.Queries.Details;
 using PlanthorWebApi.Domain.Shared;
@@ -37,8 +39,20 @@ try
     builder.Services.AddScoped<IValidator<CreateTribeCommand>, CreateTribeCommandValidator>();
     builder.Services.AddScoped<IValidator<UpdateTribeCommand>, UpdateTribeCommandValidator>();
     builder.Services.AddScoped<IValidator<TribeDetailsQuery>, TribeDetailsQueryValidator>();
+    builder.Services.AddScoped<IValidator<DeleteTribeCommand>, DeleteTribeCommandValidator>();
     builder.Services.AddEndpointsApiExplorer();
-    builder.Services.AddOpenApiDocument();
+    builder.Services.AddOpenApiDocument(options =>
+    {
+        options.PostProcess = document =>
+        {
+            document.Info = new OpenApiInfo
+            {
+                Version = "v0.0.1",
+                Title = "Planthor Web API",
+                Description = "A robust and scalable .NET Web API playing as a main resource server for Planthor",
+            };
+        };
+    });
 
     builder.Services.AddMediatR(cfg =>
     {
@@ -46,7 +60,8 @@ try
         {
             typeof(CreateTribeCommand).Assembly,
             typeof(UpdateTribeCommand).Assembly,
-            typeof(TribeDetailsQuery).Assembly
+            typeof(TribeDetailsQuery).Assembly,
+            typeof(DeleteTribeCommand).Assembly,
         };
         cfg.RegisterServicesFromAssemblies(mediatRAssemblies);
     });

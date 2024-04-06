@@ -1,5 +1,4 @@
 using System;
-using System.Linq;
 using System.Net.Http;
 using System.Net.Http.Json;
 using System.Threading.Tasks;
@@ -8,6 +7,7 @@ using Microsoft.Extensions.DependencyInjection;
 using PlanthorWebApi.Api.Tests.TestDataBuilders;
 using PlanthorWebApi.Application;
 using PlanthorWebApi.Application.Tribes.Commands.Create;
+using PlanthorWebApi.Application.Tribes.Commands.Delete;
 using PlanthorWebApi.Application.Tribes.Commands.Update;
 using PlanthorWebApi.Infrastructure;
 using Xunit;
@@ -100,6 +100,37 @@ public class TribesControllerTests : IClassFixture<CustomWebApplicationFactory<P
             var result = await dbContext.Tribes.AsNoTracking().FirstAsync(x => x.Id == tribe.Id);
             Assert.Equal("Updated Tribe Name", result.Name);
             Assert.Equal("Updated Tribe Description", result.Description);
+        }
+    }
+
+    [Fact]
+    public async Task Delete_ValidTribeId_ReturnsSuccessAsync()
+    {
+        // Arrange
+        var tribe = new TribeBuilder().Build();
+
+        var scopeFactory = _factory.Services.GetRequiredService<IServiceScopeFactory>();
+        using (var scope = scopeFactory.CreateScope())
+        {
+            var dbContext = scope.ServiceProvider.GetRequiredService<PlanthorDbContext>();
+
+            dbContext.Tribes.Add(tribe);
+            await dbContext.SaveChangesAsync();
+            dbContext.ChangeTracker.Clear();
+        }
+
+        // Act
+        var response = await _client.DeleteAsync(new Uri($"/tribes/{tribe.Id}", UriKind.Relative));
+
+        // Assert
+        Assert.NotNull(response);
+        Assert.True(response.IsSuccessStatusCode);
+        using (var scope = scopeFactory.CreateScope())
+        {
+            var dbContext = scope.ServiceProvider.GetRequiredService<PlanthorDbContext>();
+
+            var result = await dbContext.Tribes.AsNoTracking().AnyAsync(x => x.Id == tribe.Id);
+            Assert.False(result);
         }
     }
 }

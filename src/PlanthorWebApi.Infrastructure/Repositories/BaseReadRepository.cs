@@ -19,25 +19,6 @@ public sealed class BaseReadRepository<TEntity>(PlanthorDbContext dbContext)
         ?? throw new ArgumentNullException(nameof(dbContext));
 
     /// <inheritdoc/>
-    public async Task<IList<TEntity>> GetAllAsync(
-        Func<TEntity, bool>? predicate,
-        CancellationToken cancellationToken)
-    {
-        if (predicate is null)
-        {
-            return await _dbContext
-                .Set<TEntity>()
-                .ToListAsync(cancellationToken);
-        }
-
-        return await _dbContext
-            .Set<TEntity>()
-            .Where(predicate)
-            .AsQueryable()
-            .ToListAsync(cancellationToken);
-    }
-
-    /// <inheritdoc/>
     public async Task<TEntity?> GetByIdAsync(
         Guid id,
         CancellationToken cancellationToken)

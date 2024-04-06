@@ -6,6 +6,7 @@ using MediatR;
 using Microsoft.AspNetCore.Mvc;
 using PlanthorWebApi.Application;
 using PlanthorWebApi.Application.Tribes.Commands.Create;
+using PlanthorWebApi.Application.Tribes.Commands.Delete;
 using PlanthorWebApi.Application.Tribes.Commands.Update;
 using PlanthorWebApi.Application.Tribes.Queries.Details;
 
@@ -24,7 +25,8 @@ public class TribesController(
     ISender sender,
     IValidator<CreateTribeCommand> createTribeCommandValidator,
     IValidator<TribeDetailsQuery> tribeDetailsQueryValidator,
-    IValidator<UpdateTribeCommand> updateTribeCommandValidator)
+    IValidator<UpdateTribeCommand> updateTribeCommandValidator,
+    IValidator<DeleteTribeCommand> deleteTribeCommandValidator)
     : ControllerBase
 {
     private readonly ISender _sender = sender
@@ -86,6 +88,24 @@ public class TribesController(
         var updateTribeCommand = command with { Id = id };
         await updateTribeCommandValidator.ValidateAndThrowAsync(updateTribeCommand, token);
         await _sender.Send(updateTribeCommand, token);
+        return NoContent();
+    }
+
+    /// <summary>
+    /// Delete a tribe based on identifier.
+    /// </summary>
+    /// <param name="id">The unique identifier of the tribe to update.</param>
+    /// <param name="token">A cancellation token that can be used to cancel the asynchronous operation.</param>
+    /// <returns>
+    ///   - A NoContent (204) response if the deletion is successful.
+    ///   - An InternalServerError (500) response if an error occurs during deletion.
+    /// </returns>
+    [HttpDelete("{id}")]
+    public async Task<IActionResult> Delete([FromRoute] Guid id, CancellationToken token)
+    {
+        var deleteTribeCommand = new DeleteTribeCommand(id);
+        await deleteTribeCommandValidator.ValidateAndThrowAsync(deleteTribeCommand, token);
+        await _sender.Send(deleteTribeCommand, token);
         return NoContent();
     }
 }
