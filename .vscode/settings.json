@@ -2,5 +2,18 @@
     "sonarlint.connectedMode.project": {
         "connectionId": "planthor",
         "projectKey": "Planthor_PlanthorWebApi"
-    }
+    },
+    "cSpell.words": [
+        "csdevkit",
+        "devcontainer",
+        "dotnettools",
+        "opencover",
+        "Planthor",
+        "planthorwebapi"
+    ],
+    "cSpell.enableFiletypes": [
+        "dockerfile",
+        "github-actions-workflow",
+        "ignore"
+    ]
 }

@@ -1,0 +1,61 @@
+﻿name: Docker CI workflow
+
+on:
+  push:
+    branches: ["main"]
+    tags:
+      - "[0-9]+.[0-9]+.[0-9]+"
+  pull_request:
+    branches: ["main"]
+    types:
+      - opened
+      - reopened
+      - synchronize
+
+jobs:
+  docker-build:
+    runs-on: ubuntu-latest
+    name: Run docker build
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Docker Login
+        uses: docker/login-action@v3.0.0
+        with:
+          username: ${{ secrets.DOCKER_USER }}
+          password: ${{ secrets.DOCKER_TOKEN }}
+
+      - name: Docker Login
+        uses: docker/login-action@v3.0.0
+        with:
+          registry: ghcr.io
+          username: ${{ secrets.GH_USER }}
+          password: ${{ secrets.GH_TOKEN }}
+
+      - name: Define docker image name
+        id: define_docker_image
+        run: |
+          DOCKER_TAG=""
+          PUSH_ENABLED=false
+          if [[ $GITHUB_REF == 'refs/heads/main' ]]; then
+            DOCKER_TAG="latest"
+            echo DOCKER_IMAGE="ghcr.io/planthor/webapi:$DOCKER_TAG" >> "$GITHUB_OUTPUT"
+            PUSH_ENABLED=true
+          elif [[ $GITHUB_REF =~ ^refs/tags/* ]]; then
+            DOCKER_TAG="${{  github.ref_name }}"
+            echo DOCKER_IMAGE="ghcr.io/planthor/webapi:$DOCKER_TAG" >> "$GITHUB_OUTPUT"
+            PUSH_ENABLED=true
+          else
+            DOCKER_TAG="${{ github.head_ref }}"
+            DOCKER_TAG=${DOCKER_TAG//\//-}
+            echo DOCKER_IMAGE="planthordev/webapi:$DOCKER_TAG" >> "$GITHUB_OUTPUT"
+          fi
+          echo PUSH_ENABLED=$PUSH_ENABLED >> "$GITHUB_OUTPUT"
+
+      - name: Build and push Docker images
+        uses: docker/build-push-action@v5.1.0
+        with:
+          file: ./Dockerfile
+          tags: ${{ steps.define_docker_image.outputs.DOCKER_IMAGE }}
+          github-token: ${{ github.token }}
+          push: ${{ steps.define_docker_image.outputs.PUSH_ENABLED }}
