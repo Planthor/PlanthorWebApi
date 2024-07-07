@@ -1,4 +1,5 @@
 using System;
+using PlanthorWebApi.Application.Dtos;
 using PlanthorWebApi.Application.Shared;
 
 namespace PlanthorWebApi.Application.Tribes.Queries.Details;

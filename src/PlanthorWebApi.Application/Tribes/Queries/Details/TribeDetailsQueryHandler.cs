@@ -1,5 +1,6 @@
 using MediatR;
 using Microsoft.Extensions.Logging;
+using PlanthorWebApi.Application.Dtos;
 using PlanthorWebApi.Domain;
 using PlanthorWebApi.Domain.Shared;
 using System;

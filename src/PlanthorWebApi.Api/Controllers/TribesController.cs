@@ -4,7 +4,7 @@ using System.Threading.Tasks;
 using FluentValidation;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
-using PlanthorWebApi.Application;
+using PlanthorWebApi.Application.Dtos;
 using PlanthorWebApi.Application.Tribes.Commands.Create;
 using PlanthorWebApi.Application.Tribes.Commands.Delete;
 using PlanthorWebApi.Application.Tribes.Commands.Update;
@@ -19,6 +19,7 @@ namespace PlanthorWebApi.Api.Controllers;
 /// <param name="createTribeCommandValidator">The validator used to validate the <see cref="CreateTribeCommand"/>.</param>
 /// <param name="tribeDetailsQueryValidator">The validator used to validate the <see cref="TribeDetailsQuery"/>.</param>
 /// <param name="updateTribeCommandValidator">The validator used to validate the <see cref="UpdateTribeCommand"/>.</param>
+/// <param name="deleteTribeCommandValidator">The validator used to validate the <see cref="DeleteTribeCommand"/>.</param>
 [ApiController]
 [Route("[controller]")]
 public class TribesController(
