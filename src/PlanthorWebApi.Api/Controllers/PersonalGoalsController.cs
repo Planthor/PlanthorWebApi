@@ -55,15 +55,17 @@ public class PersonalGoalsController(
         [FromBody] CreateGoalCommand command,
         CancellationToken token)
     {
-        if (command == null)
-        {
-            return BadRequest();
-        }
+        // if (command == null)
+        // {
+        //     return BadRequest();
+        // }
 
-        var createGoalCommand = command with { MemberId = memberId };
-        await createGoalCommandValidator.ValidateAndThrowAsync(createGoalCommand, token);
-        var newGoalGuid = await _sender.Send(command, token);
-        return Ok(newGoalGuid);
+        // var createGoalCommand = command with { MemberId = memberId };
+        // await createGoalCommandValidator.ValidateAndThrowAsync(createGoalCommand, token);
+        // var newGoalGuid = await _sender.Send(command, token);
+        // return Ok(newGoalGuid);
+
+        throw new NotImplementedException();
     }
 
     /// <summary>
@@ -90,15 +92,16 @@ public class PersonalGoalsController(
         [FromBody] UpdateGoalCommand command,
         CancellationToken token)
     {
-        if (command == null)
-        {
-            return BadRequest();
-        }
+        // if (command == null)
+        // {
+        //     return BadRequest();
+        // }
 
-        var updateGoalCommand = command with { MemberId = memberId, GoalId = goalId };
-        await updateGoalCommandValidator.ValidateAndThrowAsync(updateGoalCommand, token);
-        await _sender.Send(updateGoalCommand, token);
-        return NoContent();
+        // var updateGoalCommand = command with { MemberId = memberId, GoalId = goalId };
+        // await updateGoalCommandValidator.ValidateAndThrowAsync(updateGoalCommand, token);
+        // await _sender.Send(updateGoalCommand, token);
+        // return NoContent();
+        throw new NotImplementedException();
     }
 
     /// <summary>
@@ -112,10 +115,11 @@ public class PersonalGoalsController(
         [FromRoute] Guid memberId,
         CancellationToken token)
     {
-        var query = new ListPersonalGoalsQuery(memberId);
-        await personalGoalsQueryValidator.ValidateAndThrowAsync(query, token);
-        var personalGoalDtos = await _sender.Send(query, token);
-        return Ok(personalGoalDtos);
+        // var query = new ListPersonalGoalsQuery(memberId);
+        // await personalGoalsQueryValidator.ValidateAndThrowAsync(query, token);
+        // var personalGoalDtos = await _sender.Send(query, token);
+        // return Ok(personalGoalDtos);
+        throw new NotImplementedException();
     }
 
     /// <summary>
@@ -137,10 +141,11 @@ public class PersonalGoalsController(
         [FromRoute] Guid goalId,
         CancellationToken token)
     {
-        var query = new PersonalGoalDetailsQuery(memberId, goalId);
-        await personalGoalDetailsQueryValidator.ValidateAndThrowAsync(query, token);
-        var personalGoalDto = await _sender.Send(query, token);
-        return Ok(personalGoalDto);
+        // var query = new PersonalGoalDetailsQuery(memberId, goalId);
+        // await personalGoalDetailsQueryValidator.ValidateAndThrowAsync(query, token);
+        // var personalGoalDto = await _sender.Send(query, token);
+        // return Ok(personalGoalDto);
+        throw new NotImplementedException();
     }
 
     /// <summary>
