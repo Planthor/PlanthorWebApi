@@ -1,6 +1,6 @@
 using System;
 
-namespace PlanthorWebApi.Application;
+namespace PlanthorWebApi.Application.Dtos;
 
 /// <summary>
 /// Data Transfer Object for the Tribe entity.
