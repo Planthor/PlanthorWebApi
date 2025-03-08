@@ -3,6 +3,7 @@
     <ProjectReference Include="..\PlanthorWebApi.Domain\PlanthorWebApi.Domain.csproj" />
   </ItemGroup>
   <ItemGroup>
+    <PackageReference Include="Microsoft.AspNetCore.Authentication" Version="2.3.0" />
     <PackageReference Include="MongoDB.EntityFrameworkCore" Version="7.0.0-preview.1" />
   </ItemGroup>
   <PropertyGroup>

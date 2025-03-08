@@ -1,5 +1,6 @@
 ﻿using System;
 using FluentValidation;
+using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -11,6 +12,7 @@ using PlanthorWebApi.Application.Tribes.Commands.Update;
 using PlanthorWebApi.Application.Tribes.Queries.Details;
 using PlanthorWebApi.Domain.Shared;
 using PlanthorWebApi.Infrastructure;
+using PlanthorWebApi.Infrastructure.Authentication;
 using PlanthorWebApi.Infrastructure.Repositories;
 using Serilog;
 
@@ -33,6 +35,13 @@ try
 
     builder.Services.AddScoped(typeof(IWriteRepository<>), typeof(BaseWriteRepository<>));
     builder.Services.AddScoped(typeof(IReadRepository<>), typeof(BaseReadRepository<>));
+
+    builder.Services.AddScoped<IUserService, UserService>();
+    builder
+        .Services
+        .AddAuthentication("BasicAuthentication")
+        .AddScheme<AuthenticationSchemeOptions, BasicAuthenticationHandler>("BasicAuthentication", null);
+
 
     // API Client
     builder.Services.AddControllers();

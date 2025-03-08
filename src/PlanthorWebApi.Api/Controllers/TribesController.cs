@@ -3,6 +3,7 @@ using System.Threading;
 using System.Threading.Tasks;
 using FluentValidation;
 using MediatR;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using PlanthorWebApi.Application.Dtos;
 using PlanthorWebApi.Application.Tribes.Commands.Create;
@@ -22,6 +23,7 @@ namespace PlanthorWebApi.Api.Controllers;
 /// <param name="deleteTribeCommandValidator">The validator used to validate the <see cref="DeleteTribeCommand"/>.</param>
 [ApiController]
 [Route("[controller]")]
+[Authorize(AuthenticationSchemes = "BasicAuthentication")]
 public class TribesController(
     ISender sender,
     IValidator<CreateTribeCommand> createTribeCommandValidator,
