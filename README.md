@@ -40,13 +40,16 @@ dotnet test --results-directory ./tests/CodeCoverageResults --collect:"XPlat Cod
 1. Start the infrastructure
 
 ```bash
-cd .\infrastructure\; docker compose up --build -d
+cd .\infrastructure\;
+docker compose up --build -d
 ```
 
 1. Start application with secret
 
 ```bash
-$env:ConnectionStrings__PlanthorDbContext = "mongodb://admin:Planthor_123@localhost:27017/"; dotnet build; dotnet run
+$env:ConnectionStrings__PlanthorDbContext = "mongodb://admin:Planthor_123@localhost:27017/";
+dotnet build;
+dotnet run
 ```
 
 ## Documentation
