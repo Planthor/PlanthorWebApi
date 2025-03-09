@@ -42,7 +42,6 @@ try
         .AddAuthentication("BasicAuthentication")
         .AddScheme<AuthenticationSchemeOptions, BasicAuthenticationHandler>("BasicAuthentication", null);
 
-
     // API Client
     builder.Services.AddControllers();
     builder.Services.AddScoped<IValidator<CreateTribeCommand>, CreateTribeCommandValidator>();
@@ -59,6 +58,16 @@ try
                 Version = "v0.0.1",
                 Title = "Planthor Web API",
                 Description = "A robust and scalable .NET Web API playing as a main resource server for Planthor",
+                Contact = new OpenApiContact
+                {
+                    Name = "Trung Pham",
+                    Url = "https://github.com/zovippro1996"
+                },
+                License = new OpenApiLicense
+                {
+                    Name = "MIT License",
+                    Url = "https://github.com/Planthor/PlanthorWebApi?tab=MIT-1-ov-file#readme"
+                }
             };
         };
     });
