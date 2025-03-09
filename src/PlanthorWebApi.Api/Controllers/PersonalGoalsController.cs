@@ -23,7 +23,7 @@ namespace PlanthorWebApi.Api.Controllers;
 /// <param name="personalGoalsQueryValidator">The validator for <see cref="ListPersonalGoalsQuery"/>.</param>
 /// <param name="personalGoalDetailsQueryValidator">The validator for <see cref="PersonalGoalDetailsQuery"/>.</param>
 [ApiController]
-[Route("Members/{memberId}/[controller]")]
+[Route("members/{memberId}/[controller]")]
 public class PersonalGoalsController(
     ISender sender,
     IValidator<CreateGoalCommand> createGoalCommandValidator,
