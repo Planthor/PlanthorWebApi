@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Linq;
 using FluentValidation;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Builder;
@@ -6,6 +7,7 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using NSwag;
+using NSwag.Generation.Processors.Security;
 using PlanthorWebApi.Application.Tribes.Commands.Create;
 using PlanthorWebApi.Application.Tribes.Commands.Delete;
 using PlanthorWebApi.Application.Tribes.Commands.Update;
@@ -70,6 +72,18 @@ try
                 }
             };
         };
+
+        options.AddSecurity(
+            "BasicAuthentication",
+            new OpenApiSecurityScheme
+            {
+                Type = OpenApiSecuritySchemeType.Basic,
+                Name = "Authorization",
+                In = OpenApiSecurityApiKeyLocation.Header,
+                Description = "Provide Basic Authentiation"
+            });
+
+        options.OperationProcessors.Add(new AspNetCoreOperationSecurityScopeProcessor("BasicAuthentication"));
     });
 
     builder.Services.AddMediatR(cfg =>
