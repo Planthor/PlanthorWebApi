@@ -6,7 +6,7 @@ RUN dotnet restore && \
 
 # final stage/image
 FROM mcr.microsoft.com/dotnet/aspnet:8.0 AS runtime
-LABEL authors="Planthor team"
+LABEL authors="Planthor"
 WORKDIR /app
 EXPOSE 5001
 COPY --from=build /app/out ./
