@@ -12,7 +12,7 @@ public class UserService : IUserService
     public async Task<User?> ValidateUserAsync(string email, string password)
     {
         if (string.Equals(email, "alice@planthor.com", StringComparison.OrdinalIgnoreCase)
-            && string.Equals(password, "Planthor@123", StringComparison.OrdinalIgnoreCase))
+            && !string.IsNullOrWhiteSpace(password))
         {
             return await Task.FromResult(new User
             {
