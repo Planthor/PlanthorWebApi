@@ -10,20 +10,14 @@ using Microsoft.Extensions.Options;
 
 namespace PlanthorWebApi.Infrastructure.Authentication;
 
-public class BasicAuthenticationHandler : AuthenticationHandler<AuthenticationSchemeOptions>
+public class BasicAuthenticationHandler(
+    IOptionsMonitor<AuthenticationSchemeOptions> options,
+    ILoggerFactory logger,
+    UrlEncoder encoder,
+    IUserService userService) : AuthenticationHandler<AuthenticationSchemeOptions>(options, logger, encoder)
 {
 
-    private readonly IUserService _userService;
-
-    public BasicAuthenticationHandler(
-        IOptionsMonitor<AuthenticationSchemeOptions> options,
-        ILoggerFactory logger,
-        UrlEncoder encoder,
-        IUserService userService)
-        : base(options, logger, encoder)
-    {
-        _userService = userService;
-    }
+    private readonly IUserService _userService = userService;
 
     protected override async Task<AuthenticateResult> HandleAuthenticateAsync()
     {
@@ -35,7 +29,7 @@ public class BasicAuthenticationHandler : AuthenticationHandler<AuthenticationSc
         }
 
         // Retrieve the value of the Authorization header.
-        var authorizationHeader = Request.Headers["Authorization"].ToString();
+        var authorizationHeader = Request.Headers.Authorization.ToString();
 
         // Attempt to parse the Authorization header into a structured AuthenticationHeaderValue object.
         if (!AuthenticationHeaderValue.TryParse(authorizationHeader, out var headerValue))

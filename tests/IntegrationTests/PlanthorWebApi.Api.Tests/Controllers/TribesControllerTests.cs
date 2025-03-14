@@ -4,6 +4,7 @@ using System.Net.Http.Json;
 using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
+using PlanthorWebApi.Api.Tests.TestAuthentication;
 using PlanthorWebApi.Api.Tests.TestDataBuilders;
 using PlanthorWebApi.Application.Dtos;
 using PlanthorWebApi.Application.Tribes.Commands.Create;
@@ -28,6 +29,7 @@ public class TribesControllerTests : IClassFixture<CustomWebApplicationFactory<P
     public async Task Create_ValidNewTribe_ReturnsValidNewTribeIdAsync()
     {
         // Arrange
+        _client.DefaultRequestHeaders.Add(TestAuthenticationHandler.TestUserRolesHeader, "Admin");
         var newTribeCommand = new CreateTribeCommand("Tribe 3", "Test Tribe 3");
 
         // Act
@@ -43,6 +45,7 @@ public class TribesControllerTests : IClassFixture<CustomWebApplicationFactory<P
     public async Task Read_ValidTribeId_ReturnsValidTribeAsync()
     {
         // Arrange
+        _client.DefaultRequestHeaders.Add(TestAuthenticationHandler.TestUserRolesHeader, "Admin");
         var tribe = new TribeBuilder().Build();
 
         var scopeFactory = _factory.Services.GetRequiredService<IServiceScopeFactory>();
@@ -69,6 +72,7 @@ public class TribesControllerTests : IClassFixture<CustomWebApplicationFactory<P
     public async Task Update_ValidTribe_ReturnsSuccessAsync()
     {
         // Arrange
+        _client.DefaultRequestHeaders.Add(TestAuthenticationHandler.TestUserRolesHeader, "Admin");
         var tribe = new TribeBuilder().Build();
 
         var scopeFactory = _factory.Services.GetRequiredService<IServiceScopeFactory>();
@@ -106,6 +110,7 @@ public class TribesControllerTests : IClassFixture<CustomWebApplicationFactory<P
     public async Task Delete_ValidTribeId_ReturnsSuccessAsync()
     {
         // Arrange
+        _client.DefaultRequestHeaders.Add(TestAuthenticationHandler.TestUserRolesHeader, "Admin");
         var tribe = new TribeBuilder().Build();
 
         var scopeFactory = _factory.Services.GetRequiredService<IServiceScopeFactory>();

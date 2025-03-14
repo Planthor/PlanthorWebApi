@@ -1,11 +1,13 @@
 using System;
 using System.Data.Common;
 using System.Linq;
+using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Mvc.Testing;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Diagnostics;
 using Microsoft.Extensions.DependencyInjection;
+using PlanthorWebApi.Api.Tests.TestAuthentication;
 using PlanthorWebApi.Infrastructure;
 
 namespace PlanthorWebApi.Api.Tests;
@@ -46,6 +48,17 @@ public class CustomWebApplicationFactory<TProgram>
                 options.UseInMemoryDatabase("PlanthorInMemoryDb");
                 options.ConfigureWarnings(warning => warning.Ignore(InMemoryEventId.TransactionIgnoredWarning));
             });
+
+            services
+            .AddAuthentication(
+                options =>
+                {
+                    options.DefaultAuthenticateScheme = "TestScheme";
+                    options.DefaultChallengeScheme = "TestSCheme";
+                })
+            .AddScheme<AuthenticationSchemeOptions, TestAuthenticationHandler>(
+                "TestScheme",
+                options => { });
         });
     }
 }

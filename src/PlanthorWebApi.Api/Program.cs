@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Linq;
 using FluentValidation;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Builder;
@@ -127,11 +126,16 @@ catch (AppDomainUnloadedException ex)
 }
 finally
 {
-    Log.CloseAndFlush();
+    await Log.CloseAndFlushAsync();
 }
 
-// Make the implicit Program.cs class public, so integration tests can reference the correct assembly for host building
+/// <summary>
+/// Make Program extensible for integration tests
+/// </summary>
 public partial class Program
 {
+    /// <summary>
+    /// Initializes a new instance of the <see cref="Program"/> class.
+    /// </summary>
     protected Program() { }
 }
