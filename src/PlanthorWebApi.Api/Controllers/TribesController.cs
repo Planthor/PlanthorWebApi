@@ -3,6 +3,8 @@ using System.Threading;
 using System.Threading.Tasks;
 using FluentValidation;
 using MediatR;
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using PlanthorWebApi.Application.Dtos;
 using PlanthorWebApi.Application.Tribes.Commands.Create;
@@ -22,6 +24,7 @@ namespace PlanthorWebApi.Api.Controllers;
 /// <param name="deleteTribeCommandValidator">The validator used to validate the <see cref="DeleteTribeCommand"/>.</param>
 [ApiController]
 [Route("[controller]")]
+[Authorize]
 public class TribesController(
     ISender sender,
     IValidator<CreateTribeCommand> createTribeCommandValidator,
@@ -42,7 +45,11 @@ public class TribesController(
     /// A task that represents the asynchronous operation.
     /// The task result contains the ActionResult of <see cref="Guid"/>.
     /// </returns>
+    /// <response code="401">If the client is not authenticated.</response>
+    /// <response code="200">The newly created Tribe Guid.</response>
     [HttpPost]
+    [ProducesResponseType(StatusCodes.Status401Unauthorized)]
+    [ProducesResponseType(typeof(Guid), StatusCodes.Status200OK)]
     public async Task<ActionResult<Guid>> Create(CreateTribeCommand command, CancellationToken token)
     {
         await createTribeCommandValidator.ValidateAndThrowAsync(command, token);
@@ -59,7 +66,9 @@ public class TribesController(
     /// A task that represents the asynchronous operation.
     /// The task result contains the ActionResult of <see cref="TribeDto"/>.
     /// </returns>
+    /// <response code="401">If the client is not authenticated.</response>
     [HttpGet("{id}")]
+    [ProducesResponseType(StatusCodes.Status401Unauthorized)]
     public async Task<ActionResult<TribeDto>> Read(Guid id, CancellationToken token)
     {
         var query = new TribeDetailsQuery(id);
@@ -75,7 +84,9 @@ public class TribesController(
     /// <param name="command">An object containing the update details for the tribe. (See UpdateTribeCommand class for details)</param>
     /// <param name="token">A cancellation token that can be used to cancel the asynchronous operation.</param>
     /// <returns>An empty `204 No Content` response if successful, otherwise an appropriate error response.</returns>
+    /// <response code="401">If the client is not authenticated.</response>
     [HttpPut("{id}")]
+    [ProducesResponseType(StatusCodes.Status401Unauthorized)]
     public async Task<IActionResult> Update(
         [FromRoute] Guid id,
         [FromBody] UpdateTribeCommand command,
@@ -101,7 +112,9 @@ public class TribesController(
     ///   - A NoContent (204) response if the deletion is successful.
     ///   - An InternalServerError (500) response if an error occurs during deletion.
     /// </returns>
+    /// <response code="401">If the client is not authenticated.</response>
     [HttpDelete("{id}")]
+    [ProducesResponseType(StatusCodes.Status401Unauthorized)]
     public async Task<IActionResult> Delete([FromRoute] Guid id, CancellationToken token)
     {
         var deleteTribeCommand = new DeleteTribeCommand(id);

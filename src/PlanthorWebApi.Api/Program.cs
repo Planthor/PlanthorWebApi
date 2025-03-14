@@ -1,16 +1,19 @@
 ﻿using System;
 using FluentValidation;
+using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using NSwag;
+using NSwag.Generation.Processors.Security;
 using PlanthorWebApi.Application.Tribes.Commands.Create;
 using PlanthorWebApi.Application.Tribes.Commands.Delete;
 using PlanthorWebApi.Application.Tribes.Commands.Update;
 using PlanthorWebApi.Application.Tribes.Queries.Details;
 using PlanthorWebApi.Domain.Shared;
 using PlanthorWebApi.Infrastructure;
+using PlanthorWebApi.Infrastructure.Authentication;
 using PlanthorWebApi.Infrastructure.Repositories;
 using Serilog;
 
@@ -34,6 +37,12 @@ try
     builder.Services.AddScoped(typeof(IWriteRepository<>), typeof(BaseWriteRepository<>));
     builder.Services.AddScoped(typeof(IReadRepository<>), typeof(BaseReadRepository<>));
 
+    builder.Services.AddScoped<IUserService, UserService>();
+    builder
+        .Services
+        .AddAuthentication("BasicAuthentication")
+        .AddScheme<AuthenticationSchemeOptions, BasicAuthenticationHandler>("BasicAuthentication", null);
+
     // API Client
     builder.Services.AddControllers();
     builder.Services.AddScoped<IValidator<CreateTribeCommand>, CreateTribeCommandValidator>();
@@ -50,8 +59,30 @@ try
                 Version = "v0.0.1",
                 Title = "Planthor Web API",
                 Description = "A robust and scalable .NET Web API playing as a main resource server for Planthor",
+                Contact = new OpenApiContact
+                {
+                    Name = "Trung Pham",
+                    Url = "https://github.com/zovippro1996"
+                },
+                License = new OpenApiLicense
+                {
+                    Name = "MIT License",
+                    Url = "https://github.com/Planthor/PlanthorWebApi?tab=MIT-1-ov-file#readme"
+                }
             };
         };
+
+        options.AddSecurity(
+            "BasicAuthentication",
+            new OpenApiSecurityScheme
+            {
+                Type = OpenApiSecuritySchemeType.Basic,
+                Name = "Authorization",
+                In = OpenApiSecurityApiKeyLocation.Header,
+                Description = "Provide Basic Authentiation"
+            });
+
+        options.OperationProcessors.Add(new AspNetCoreOperationSecurityScopeProcessor("BasicAuthentication"));
     });
 
     builder.Services.AddMediatR(cfg =>
@@ -95,11 +126,16 @@ catch (AppDomainUnloadedException ex)
 }
 finally
 {
-    Log.CloseAndFlush();
+    await Log.CloseAndFlushAsync();
 }
 
-// Make the implicit Program.cs class public, so integration tests can reference the correct assembly for host building
+/// <summary>
+/// Make Program extensible for integration tests
+/// </summary>
 public partial class Program
 {
+    /// <summary>
+    /// Initializes a new instance of the <see cref="Program"/> class.
+    /// </summary>
     protected Program() { }
 }
