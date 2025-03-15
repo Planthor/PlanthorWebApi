@@ -10,7 +10,6 @@ using PlanthorWebApi.Application.Dtos;
 using PlanthorWebApi.Application.Members.Commands.Create;
 using PlanthorWebApi.Application.Members.Commands.Update;
 using PlanthorWebApi.Application.Members.Queries.Details;
-using PlanthorWebApi.Application.Members.Queries.Lists;
 
 namespace PlanthorWebApi.Api.Controllers;
 
