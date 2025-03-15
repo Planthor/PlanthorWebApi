@@ -1,6 +1,5 @@
 ﻿using System;
 using FluentValidation;
-using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -40,8 +39,14 @@ try
     builder.Services.AddScoped<IUserService, UserService>();
     builder
         .Services
-        .AddAuthentication("BasicAuthentication")
-        .AddScheme<AuthenticationSchemeOptions, BasicAuthenticationHandler>("BasicAuthentication", null);
+        // .AddAuthentication("BasicAuthentication")
+        // .AddScheme<AuthenticationSchemeOptions, BasicAuthenticationHandler>("BasicAuthentication", null)
+        .AddAuthentication()
+        .AddJwtBearer(options =>
+        {
+            options.Authority = "https://localhost:5001";
+            options.Audience = "planthorAPI";
+        });
 
     // API Client
     builder.Services.AddControllers();
@@ -72,17 +77,18 @@ try
             };
         };
 
+        // SwaggerUI JWTAuthentication
         options.AddSecurity(
-            "BasicAuthentication",
+            "JWTBearerAuthentication",
             new OpenApiSecurityScheme
             {
-                Type = OpenApiSecuritySchemeType.Basic,
+                Type = OpenApiSecuritySchemeType.ApiKey,
                 Name = "Authorization",
                 In = OpenApiSecurityApiKeyLocation.Header,
-                Description = "Provide Basic Authentiation"
-            });
-
-        options.OperationProcessors.Add(new AspNetCoreOperationSecurityScopeProcessor("BasicAuthentication"));
+                Description = "Type into the textbox: Bearer {your JWT token}."
+            }
+        );
+        options.OperationProcessors.Add(new AspNetCoreOperationSecurityScopeProcessor("JWTBearerAuthentication"));
     });
 
     builder.Services.AddMediatR(cfg =>
