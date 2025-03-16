@@ -24,7 +24,8 @@ public class TestAuthenticationHandler : AuthenticationHandler<AuthenticationSch
     protected override Task<AuthenticateResult> HandleAuthenticateAsync()
     {
         var rolesHeader = Request.Headers[TestUserRolesHeader].FirstOrDefault() ?? "User";
-        var roles = rolesHeader.Split([','], StringSplitOptions.RemoveEmptyEntries);
+        
+        var roles = rolesHeader.Split(",", StringSplitOptions.RemoveEmptyEntries);
 
         var claims = new List<Claim> { new(ClaimTypes.Name, "TestUser") };
 

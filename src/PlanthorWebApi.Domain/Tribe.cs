@@ -6,13 +6,36 @@ namespace PlanthorWebApi.Domain;
 
 public class Tribe : IAggregateRoot, IEntity
 {
+    public Tribe()
+    {
+        Name = string.Empty;
+        Nationality = "VN";
+        OwnerId = new(Guid.Empty.ToString());
+    }
+
+    public Tribe(
+        string name,
+        string? slogan,
+        string? description,
+        string? pathAvatar,
+        string nationality,
+        string ownerId)
+    {
+        Name = name;
+        Slogan = slogan;
+        Description = description;
+        PathAvatar = pathAvatar;
+        Nationality = nationality;
+        OwnerId = new(ownerId);
+    }
+
     public static readonly int MaxNameLength = 128;
     public static readonly int MaxDescriptionLength = 3000;
     public static readonly int MaxNationalityLength = 2;
 
     public Guid Id { get; protected set; }
 
-    public string Name { get; set; } = string.Empty;
+    public string Name { get; set; }
 
     public string? Slogan { get; set; }
 
@@ -20,7 +43,9 @@ public class Tribe : IAggregateRoot, IEntity
 
     public string? PathAvatar { get; set; }
 
-    public string Nationality { get; set; } = "VN";
+    public string Nationality { get; protected set; }
+
+    public OwnerId OwnerId { get; protected set; }
 
     public IEnumerable<string> Validate()
     {
