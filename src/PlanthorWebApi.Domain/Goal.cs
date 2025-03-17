@@ -6,10 +6,19 @@ namespace PlanthorWebApi.Domain;
 
 public class Goal : IAggregateRoot, IEntity
 {
-    protected Goal()
-    { }
+    public Goal()
+    {
+        OwnerId = new(Guid.Empty.ToString());
+    }
 
-    public Guid Id => throw new NotImplementedException();
+    public Goal(Guid id, string ownerId)
+    {
+        OwnerId = new(ownerId);
+    }
+
+    public Guid Id { get; protected set; }
+
+    public OwnerId OwnerId { get; protected set; }
 
     public IEnumerable<string> Validate()
     {

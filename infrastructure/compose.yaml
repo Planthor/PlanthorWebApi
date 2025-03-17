@@ -3,7 +3,7 @@ name: planthor-webapi-infrastructure
 services:
 
   mongodb:
-    image: mongo:7
+    image: mongo:8
     environment:
       - MONGO_INITDB_ROOT_USERNAME=admin
       - MONGO_INITDB_ROOT_PASSWORD=Planthor_123
