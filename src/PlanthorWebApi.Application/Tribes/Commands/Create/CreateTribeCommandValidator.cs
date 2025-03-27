@@ -21,5 +21,8 @@ public sealed class CreateTribeCommandValidator : AbstractValidator<CreateTribeC
         RuleFor(v => v.Description)
             .MaximumLength(Tribe.MaxDescriptionLength)
             .WithMessage($"Description must not exceed {Tribe.MaxDescriptionLength} characters.");
+        RuleFor(v => v.IdentityId)
+            .NotEmpty()
+            .WithMessage("Identity is required.");
     }
 }

@@ -14,8 +14,9 @@ internal sealed class TribeEntityConfiguration : IEntityTypeConfiguration<Tribe>
     /// Configures the entity mapping for the <see cref="Tribe"/> entity.
     /// </summary>
     /// <param name="builder">The entity type builder used to configure the entity.</param>
-    public void Configure(EntityTypeBuilder<Tribe> builder)
+    public void Configure(EntityTypeBuilder<Tribe> tribeConfiguration)
     {
-        builder.ToCollection("tribes");
+        tribeConfiguration.ToCollection("tribes");
+        tribeConfiguration.OwnsOne(o => o.OwnerId);
     }
 }

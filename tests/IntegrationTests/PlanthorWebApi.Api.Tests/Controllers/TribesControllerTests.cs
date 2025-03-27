@@ -4,6 +4,7 @@ using System.Net.Http.Json;
 using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
+using PlanthorWebApi.Api.Requests;
 using PlanthorWebApi.Api.Tests.TestAuthentication;
 using PlanthorWebApi.Api.Tests.TestDataBuilders;
 using PlanthorWebApi.Application.Dtos;
@@ -30,10 +31,10 @@ public class TribesControllerTests : IClassFixture<CustomWebApplicationFactory<P
     {
         // Arrange
         _client.DefaultRequestHeaders.Add(TestAuthenticationHandler.TestUserRolesHeader, "Admin");
-        var newTribeCommand = new CreateTribeCommand("Tribe 3", "Test Tribe 3");
+        var newTribeRequest = new CreateTribeRequest("Tribe 3", "Test Tribe 3");
 
         // Act
-        var response = await _client.PostAsJsonAsync("/tribes", newTribeCommand);
+        var response = await _client.PostAsJsonAsync("/tribes", newTribeRequest);
 
         // Assert
         response.EnsureSuccessStatusCode();

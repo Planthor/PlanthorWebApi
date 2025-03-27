@@ -6,6 +6,11 @@ public sealed class OwnerId : ValueObject
 {
     public string Value { get; }
 
+    public OwnerId()
+    {
+        Value = Guid.Empty.ToString();
+    }
+
     public OwnerId(string value)
     {
         if (string.IsNullOrEmpty(value))

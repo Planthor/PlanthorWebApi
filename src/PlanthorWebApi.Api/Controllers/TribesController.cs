@@ -1,4 +1,6 @@
 using System;
+using System.Linq;
+using System.Security.Claims;
 using System.Threading;
 using System.Threading.Tasks;
 using FluentValidation;
@@ -6,6 +8,7 @@ using MediatR;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using PlanthorWebApi.Api.Requests;
 using PlanthorWebApi.Application.Dtos;
 using PlanthorWebApi.Application.Tribes.Commands.Create;
 using PlanthorWebApi.Application.Tribes.Commands.Delete;
@@ -50,9 +53,16 @@ public class TribesController(
     [HttpPost]
     [ProducesResponseType(StatusCodes.Status401Unauthorized)]
     [ProducesResponseType(typeof(Guid), StatusCodes.Status200OK)]
-    public async Task<ActionResult<Guid>> Create(CreateTribeCommand command, CancellationToken token)
+    public async Task<ActionResult<Guid>> Create(CreateTribeRequest command, CancellationToken token)
     {
-        await createTribeCommandValidator.ValidateAndThrowAsync(command, token);
+        var userId = User.Claims.FirstOrDefault(c => c.Type == ClaimTypes.NameIdentifier).Value;
+        var newCreateTribeCommand = new CreateTribeCommand(
+            command.Name,
+            command.Description,
+            userId
+        );
+
+        await createTribeCommandValidator.ValidateAndThrowAsync(newCreateTribeCommand, token);
         var newTribeGuid = await _sender.Send(command, token);
         return Ok(newTribeGuid);
     }
