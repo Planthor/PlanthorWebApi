@@ -55,7 +55,18 @@ public class TribesController(
     [ProducesResponseType(typeof(Guid), StatusCodes.Status200OK)]
     public async Task<ActionResult<Guid>> Create(CreateTribeRequest command, CancellationToken token)
     {
-        var userId = User.Claims.FirstOrDefault(c => c.Type == ClaimTypes.NameIdentifier).Value;
+        var userNameClaim = User.Claims.FirstOrDefault(c => c.Type == ClaimTypes.NameIdentifier);
+        if (userNameClaim == null)
+        {
+            return BadRequest("Unable to get Claim NameIdentifier");
+        }
+
+        var userId = userNameClaim.Value;
+        if (command == null)
+        {
+            return BadRequest("Invalid request");
+        }
+
         var newCreateTribeCommand = new CreateTribeCommand(
             command.Name,
             command.Description,
