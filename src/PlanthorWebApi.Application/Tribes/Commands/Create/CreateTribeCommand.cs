@@ -10,6 +10,7 @@ namespace PlanthorWebApi.Application.Tribes.Commands.Create;
 /// <param name="Description">The description of the tribe.</param>
 /// <param name="IdentityId">Identity that send the command.</param>
 public record CreateTribeCommand(
-    string Name, 
+    string Name,
+    string? Slogan,
     string? Description,
-    string IdentityId) : ICommand<Guid>;
+    string OwnerId) : ICommand<Guid>;

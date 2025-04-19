@@ -17,6 +17,7 @@ internal sealed class TribeEntityConfiguration : IEntityTypeConfiguration<Tribe>
     public void Configure(EntityTypeBuilder<Tribe> tribeConfiguration)
     {
         tribeConfiguration.ToCollection("tribes");
-        tribeConfiguration.OwnsOne(o => o.OwnerId);
+        tribeConfiguration.HasKey(x => x.Id);
+        tribeConfiguration.Property(x => x.Id).ValueGeneratedOnAddOrUpdate();
     }
 }

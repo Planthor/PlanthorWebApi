@@ -42,7 +42,7 @@ public class TribesController(
     /// <summary>
     /// Creates a new tribe.
     /// </summary>
-    /// <param name="command">The command to create a new tribe.</param>
+    /// <param name="request">The command to create a new tribe.</param>
     /// <param name="token">A cancellation token that can be used to cancel the work.</param>
     /// <returns>
     /// A task that represents the asynchronous operation.
@@ -53,7 +53,7 @@ public class TribesController(
     [HttpPost]
     [ProducesResponseType(StatusCodes.Status401Unauthorized)]
     [ProducesResponseType(typeof(Guid), StatusCodes.Status200OK)]
-    public async Task<ActionResult<Guid>> Create(CreateTribeRequest command, CancellationToken token)
+    public async Task<ActionResult<Guid>> Create(CreateTribeRequest request, CancellationToken token)
     {
         var userNameClaim = User.Claims.FirstOrDefault(c => c.Type == ClaimTypes.NameIdentifier);
         if (userNameClaim == null)
@@ -62,19 +62,20 @@ public class TribesController(
         }
 
         var userId = userNameClaim.Value;
-        if (command == null)
+        if (request == null)
         {
             return BadRequest("Invalid request");
         }
 
         var newCreateTribeCommand = new CreateTribeCommand(
-            command.Name,
-            command.Description,
+            request.Name,
+            request.Slogan,
+            request.Description,
             userId
         );
 
         await createTribeCommandValidator.ValidateAndThrowAsync(newCreateTribeCommand, token);
-        var newTribeGuid = await _sender.Send(command, token);
+        var newTribeGuid = await _sender.Send(request, token);
         return Ok(newTribeGuid);
     }
 

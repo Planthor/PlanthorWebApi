@@ -1,5 +1,7 @@
+using System;
+
 namespace PlanthorWebApi.Domain;
 
-public class PersonalGoal : Goal
+public class PersonalGoal(Guid id) : Goal(id)
 {
 }

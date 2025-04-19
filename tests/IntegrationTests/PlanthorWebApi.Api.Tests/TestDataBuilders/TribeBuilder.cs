@@ -7,16 +7,14 @@ public class TribeBuilder
 {
     private string _name;
     private string _description;
-    private string? _slogan;
-    private string? _pathAvatar;
-    private string _nationality;
-    private string _ownerId;
+    private readonly string? _slogan;
+    private readonly string _ownerId;
 
     public TribeBuilder()
     {
         _name = "Tribe 1";
         _description = "Test Tribe 1";
-        _nationality = "VN";
+        _slogan = null;
         _ownerId = Guid.Empty.ToString();
     }
 
@@ -38,8 +36,6 @@ public class TribeBuilder
             _name,
             _slogan,
             _description,
-            _pathAvatar,
-            _nationality,
             _ownerId
         );
     }

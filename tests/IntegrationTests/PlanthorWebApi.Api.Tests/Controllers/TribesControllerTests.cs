@@ -31,7 +31,10 @@ public class TribesControllerTests : IClassFixture<CustomWebApplicationFactory<P
     {
         // Arrange
         _client.DefaultRequestHeaders.Add(TestAuthenticationHandler.TestUserRolesHeader, "Admin");
-        var newTribeRequest = new CreateTribeRequest("Tribe 3", "Test Tribe 3");
+        var newTribeRequest = new CreateTribeRequest(
+            "Tribe 3",
+            null,
+            "Test Tribe 3");
 
         // Act
         var response = await _client.PostAsJsonAsync("/tribes", newTribeRequest);

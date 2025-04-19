@@ -18,8 +18,9 @@ public class CreateTribeCommandValidatorTests
     {
         // Arrange
         var model = new CreateTribeCommand(
-            string.Empty, 
-            null, 
+            string.Empty,
+            null,
+            null,
             "test");
 
         // Act
@@ -34,7 +35,8 @@ public class CreateTribeCommandValidatorTests
     {
         // Arrange
         var model = new CreateTribeCommand(
-            new string('a', Tribe.MaxNameLength + 1), 
+            new string('a', Tribe.MaxNameLength + 1),
+            null,
             null,
             "test");
 
@@ -50,7 +52,8 @@ public class CreateTribeCommandValidatorTests
     {
         // Arrange
         var model = new CreateTribeCommand(
-            new string('a', Tribe.MaxNameLength), 
+            new string('a', Tribe.MaxNameLength),
+            null,
             null,
             "null");
 
@@ -66,7 +69,8 @@ public class CreateTribeCommandValidatorTests
     {
         // Arrange
         var model = new CreateTribeCommand(
-            "Test", 
+            "Test",
+            null,
             new string('a', Tribe.MaxDescriptionLength + 1),
             "test");
 
@@ -82,7 +86,8 @@ public class CreateTribeCommandValidatorTests
     {
         // Arrange
         var model = new CreateTribeCommand(
-            "Test", 
+            "Test",
+            null,
             new string('a', Tribe.MaxDescriptionLength),
             "test");
 
