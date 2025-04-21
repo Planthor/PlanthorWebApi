@@ -75,7 +75,7 @@ public class TribesController(
         );
 
         await createTribeCommandValidator.ValidateAndThrowAsync(newCreateTribeCommand, token);
-        var newTribeGuid = await _sender.Send(request, token);
+        var newTribeGuid = await _sender.Send(newCreateTribeCommand, token);
         return Ok(newTribeGuid);
     }
 
