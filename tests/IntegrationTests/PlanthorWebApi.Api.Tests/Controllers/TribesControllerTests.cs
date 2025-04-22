@@ -8,7 +8,6 @@ using PlanthorWebApi.Api.Requests;
 using PlanthorWebApi.Api.Tests.TestAuthentication;
 using PlanthorWebApi.Api.Tests.TestDataBuilders;
 using PlanthorWebApi.Application.Dtos;
-using PlanthorWebApi.Application.Tribes.Commands.Create;
 using PlanthorWebApi.Application.Tribes.Commands.Update;
 using PlanthorWebApi.Infrastructure;
 using Xunit;

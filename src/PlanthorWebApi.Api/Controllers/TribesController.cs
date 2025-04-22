@@ -49,9 +49,11 @@ public class TribesController(
     /// The task result contains the ActionResult of <see cref="Guid"/>.
     /// </returns>
     /// <response code="401">If the client is not authenticated.</response>
+    /// <response code="403">If the client claims is not strong enough to call the endpoint.</response>
     /// <response code="200">The newly created Tribe Guid.</response>
     [HttpPost]
     [ProducesResponseType(StatusCodes.Status401Unauthorized)]
+    [ProducesResponseType(StatusCodes.Status403Forbidden)]
     [ProducesResponseType(typeof(Guid), StatusCodes.Status200OK)]
     public async Task<ActionResult<Guid>> Create(CreateTribeRequest request, CancellationToken token)
     {
@@ -91,6 +93,7 @@ public class TribesController(
     /// <response code="401">If the client is not authenticated.</response>
     [HttpGet("{id}")]
     [ProducesResponseType(StatusCodes.Status401Unauthorized)]
+    [ProducesResponseType(typeof(TribeDto), StatusCodes.Status200OK)]
     public async Task<ActionResult<TribeDto>> Read(Guid id, CancellationToken token)
     {
         var query = new TribeDetailsQuery(id);
