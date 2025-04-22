@@ -1,35 +1,60 @@
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using PlanthorWebApi.Domain.Shared;
 
 namespace PlanthorWebApi.Domain;
 
 /// <summary>
-/// TODO: Verify if EF Core can understand with ID and without ID in constructor. Impact Id generation solution.
 /// </summary>
-/// <param name="name"></param>
-/// <param name="slogan"></param>
-/// <param name="description"></param>
-/// <param name="ownerId"></param>
-public class Tribe(
-    string name,
-    string? slogan,
-    string? description,
-    string ownerId) : IAggregateRoot, IEntity, IOwnedEntity
+public class Tribe : IAggregateRoot, IEntity, IOwnedEntity
 {
+    public Tribe(
+        string name,
+        string? slogan,
+        string? description,
+        string ownerId
+    )
+    {
+        Name = name;
+        Slogan = slogan;
+        Description = description;
+        OwnerId = ownerId;
+        _memberships = []; // TODO : initialize the membership with Leader from DDD RaiseEvent, so we can have IClock implementation in EventHandler
+    }
+
     public static readonly int MaxNameLength = 128;
     public static readonly int MaxDescriptionLength = 3000;
     public static readonly int MaxNationalityLength = 2;
 
     public Guid Id { get; protected set; }
 
-    public string Name { get; set; } = name;
+    public string Name { get; set; }
 
-    public string? Slogan { get; set; } = slogan;
+    public string? Slogan { get; set; }
 
-    public string? Description { get; set; } = description;
+    public string? Description { get; set; }
 
-    public string OwnerId { get; protected set; } = ownerId;
+    public string OwnerId { get; protected set; }
+
+    private readonly List<TribeMember> _memberships;
+    public IReadOnlyCollection<TribeMember> Memberships => _memberships.AsReadOnly();
+
+    public void AddMember(Guid memberId, IClock clock, bool isLeader)
+    {
+        if (clock is null)
+        {
+            throw new ArgumentNullException(nameof(clock));
+        }
+
+        if (_memberships.Any(m => m.MemberId == memberId))
+        {
+            return;
+        }
+
+        var tribeMember = new TribeMember(Guid.NewGuid(), clock.UtcNow, isLeader);
+        _memberships.Add(tribeMember);
+    }
 
     public IEnumerable<string> Validate()
     {
