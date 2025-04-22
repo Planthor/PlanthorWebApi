@@ -1,4 +1,6 @@
 using System;
+using System.Linq;
+using System.Security.Claims;
 using System.Threading;
 using System.Threading.Tasks;
 using FluentValidation;
@@ -6,6 +8,7 @@ using MediatR;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using PlanthorWebApi.Api.Requests;
 using PlanthorWebApi.Application.Dtos;
 using PlanthorWebApi.Application.Tribes.Commands.Create;
 using PlanthorWebApi.Application.Tribes.Commands.Delete;
@@ -39,21 +42,42 @@ public class TribesController(
     /// <summary>
     /// Creates a new tribe.
     /// </summary>
-    /// <param name="command">The command to create a new tribe.</param>
+    /// <param name="request">The command to create a new tribe.</param>
     /// <param name="token">A cancellation token that can be used to cancel the work.</param>
     /// <returns>
     /// A task that represents the asynchronous operation.
     /// The task result contains the ActionResult of <see cref="Guid"/>.
     /// </returns>
     /// <response code="401">If the client is not authenticated.</response>
+    /// <response code="403">If the client claims is not strong enough to call the endpoint.</response>
     /// <response code="200">The newly created Tribe Guid.</response>
     [HttpPost]
     [ProducesResponseType(StatusCodes.Status401Unauthorized)]
+    [ProducesResponseType(StatusCodes.Status403Forbidden)]
     [ProducesResponseType(typeof(Guid), StatusCodes.Status200OK)]
-    public async Task<ActionResult<Guid>> Create(CreateTribeCommand command, CancellationToken token)
+    public async Task<ActionResult<Guid>> Create(CreateTribeRequest request, CancellationToken token)
     {
-        await createTribeCommandValidator.ValidateAndThrowAsync(command, token);
-        var newTribeGuid = await _sender.Send(command, token);
+        var userNameClaim = User.Claims.FirstOrDefault(c => c.Type == ClaimTypes.NameIdentifier);
+        if (userNameClaim == null)
+        {
+            return BadRequest("Unable to get Claim NameIdentifier");
+        }
+
+        var userId = userNameClaim.Value;
+        if (request == null)
+        {
+            return BadRequest("Invalid request");
+        }
+
+        var newCreateTribeCommand = new CreateTribeCommand(
+            request.Name,
+            request.Slogan,
+            request.Description,
+            userId
+        );
+
+        await createTribeCommandValidator.ValidateAndThrowAsync(newCreateTribeCommand, token);
+        var newTribeGuid = await _sender.Send(newCreateTribeCommand, token);
         return Ok(newTribeGuid);
     }
 
@@ -69,6 +93,7 @@ public class TribesController(
     /// <response code="401">If the client is not authenticated.</response>
     [HttpGet("{id}")]
     [ProducesResponseType(StatusCodes.Status401Unauthorized)]
+    [ProducesResponseType(typeof(TribeDto), StatusCodes.Status200OK)]
     public async Task<ActionResult<TribeDto>> Read(Guid id, CancellationToken token)
     {
         var query = new TribeDetailsQuery(id);

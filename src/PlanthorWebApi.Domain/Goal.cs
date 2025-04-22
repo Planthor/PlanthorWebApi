@@ -4,12 +4,9 @@ using PlanthorWebApi.Domain.Shared;
 
 namespace PlanthorWebApi.Domain;
 
-public class Goal : IAggregateRoot, IEntity
+public class Goal(Guid id) : IAggregateRoot, IEntity
 {
-    protected Goal()
-    { }
-
-    public Guid Id => throw new NotImplementedException();
+    public Guid Id { get; protected set; } = id;
 
     public IEnumerable<string> Validate()
     {

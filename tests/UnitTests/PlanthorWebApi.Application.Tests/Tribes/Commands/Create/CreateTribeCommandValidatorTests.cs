@@ -17,7 +17,11 @@ public class CreateTribeCommandValidatorTests
     public void ShouldHaveErrorWhenNameIsEmpty()
     {
         // Arrange
-        var model = new CreateTribeCommand(string.Empty, null);
+        var model = new CreateTribeCommand(
+            string.Empty,
+            null,
+            null,
+            "test");
 
         // Act
         var result = _validator.TestValidate(model);
@@ -30,7 +34,11 @@ public class CreateTribeCommandValidatorTests
     public void ShouldHaveErrorWhenNameIsTooLong()
     {
         // Arrange
-        var model = new CreateTribeCommand(new string('a', Tribe.MaxNameLength + 1), null);
+        var model = new CreateTribeCommand(
+            new string('a', Tribe.MaxNameLength + 1),
+            null,
+            null,
+            "test");
 
         // Act
         var result = _validator.TestValidate(model);
@@ -43,7 +51,11 @@ public class CreateTribeCommandValidatorTests
     public void ShouldNotHaveErrorWhenNameIsJustRight()
     {
         // Arrange
-        var model = new CreateTribeCommand(new string('a', Tribe.MaxNameLength), null);
+        var model = new CreateTribeCommand(
+            new string('a', Tribe.MaxNameLength),
+            null,
+            null,
+            "null");
 
         // Act
         var result = _validator.TestValidate(model);
@@ -56,7 +68,11 @@ public class CreateTribeCommandValidatorTests
     public void ShouldHaveErrorWhenDescriptionIsTooLong()
     {
         // Arrange
-        var model = new CreateTribeCommand("Test", new string('a', Tribe.MaxDescriptionLength + 1));
+        var model = new CreateTribeCommand(
+            "Test",
+            null,
+            new string('a', Tribe.MaxDescriptionLength + 1),
+            "test");
 
         // Act
         var result = _validator.TestValidate(model);
@@ -69,7 +85,11 @@ public class CreateTribeCommandValidatorTests
     public void ShouldNotHaveErrorWhenDescriptionIsJustRight()
     {
         // Arrange
-        var model = new CreateTribeCommand("Test", new string('a', Tribe.MaxDescriptionLength));
+        var model = new CreateTribeCommand(
+            "Test",
+            null,
+            new string('a', Tribe.MaxDescriptionLength),
+            "test");
 
         // Act
         var result = _validator.TestValidate(model);

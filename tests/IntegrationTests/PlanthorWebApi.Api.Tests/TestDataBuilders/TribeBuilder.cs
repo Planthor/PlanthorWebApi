@@ -1,3 +1,4 @@
+using System;
 using PlanthorWebApi.Domain;
 
 namespace PlanthorWebApi.Api.Tests.TestDataBuilders;
@@ -6,11 +7,15 @@ public class TribeBuilder
 {
     private string _name;
     private string _description;
+    private readonly string? _slogan;
+    private readonly string _ownerId;
 
     public TribeBuilder()
     {
         _name = "Tribe 1";
         _description = "Test Tribe 1";
+        _slogan = null;
+        _ownerId = Guid.Empty.ToString();
     }
 
     public TribeBuilder WithName(string name)
@@ -27,10 +32,11 @@ public class TribeBuilder
 
     public Tribe Build()
     {
-        return new Tribe
-        {
-            Name = _name,
-            Description = _description
-        };
+        return new Tribe(
+            _name,
+            _slogan,
+            _description,
+            _ownerId
+        );
     }
 }

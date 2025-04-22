@@ -24,9 +24,12 @@ public class TestAuthenticationHandler : AuthenticationHandler<AuthenticationSch
     protected override Task<AuthenticateResult> HandleAuthenticateAsync()
     {
         var rolesHeader = Request.Headers[TestUserRolesHeader].FirstOrDefault() ?? "User";
-        var roles = rolesHeader.Split([','], StringSplitOptions.RemoveEmptyEntries);
 
-        var claims = new List<Claim> { new(ClaimTypes.Name, "TestUser") };
+        var roles = rolesHeader.Split(",", StringSplitOptions.RemoveEmptyEntries);
+
+        var claims = new List<Claim> {
+            new(ClaimTypes.Name, "TestUser"),
+            new(ClaimTypes.NameIdentifier, Guid.NewGuid().ToString()) };
 
         // Add role claims after trimming whitespace
         foreach (var role in roles)

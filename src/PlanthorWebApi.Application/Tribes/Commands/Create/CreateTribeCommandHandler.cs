@@ -19,15 +19,16 @@ internal sealed class CreateTribeCommandHandler(
     : ICommandHandler<CreateTribeCommand, Guid>
 {
     /// <inheritdoc/>
-    public async Task<Guid> Handle(CreateTribeCommand request, CancellationToken cancellationToken)
+    public async Task<Guid> Handle(CreateTribeCommand command, CancellationToken cancellationToken)
     {
         logger.LogInformation("CreateTribeCommand - Handle - Start");
 
-        var newTribe = new Tribe
-        {
-            Name = request.Name,
-            Description = request.Description
-        };
+        var newTribe = new Tribe(
+            name: command.Name,
+            slogan: command.Slogan,
+            description: command.Description,
+            ownerId: command.OwnerId
+        );
 
         var result = await tribes.AddAsync(newTribe, cancellationToken);
         return result.Id;
