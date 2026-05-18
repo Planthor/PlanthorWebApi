@@ -18,4 +18,9 @@ public class MemberRepository(PlanthorDbContext context) : BaseRepository<Member
     {
         return await Context.Members.FirstOrDefaultAsync(m => m.IdentifyName == identifyName, cancellationToken);
     }
+
+    public async Task<bool> AnyAsync(string identifyName, CancellationToken cancellationToken)
+    {
+        return await Context.Members.AnyAsync(m => m.IdentifyName == identifyName, cancellationToken);
+    }
 }

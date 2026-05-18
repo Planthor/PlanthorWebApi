@@ -11,7 +11,12 @@ namespace Adapters.Strava;
 /// </summary>
 public sealed class StravaActivitySyncAdapter(StravaApiClient client) : IActivitySyncAdapter
 {
-    public string ProviderId => throw new NotImplementedException();
+    private readonly StravaApiClient _client = client ?? throw new ArgumentNullException(nameof(client));
+
+    /// <summary>
+    /// Gets the provider ID for Strava.
+    /// </summary>
+    public string ProviderId => "STRAVA";
 
     /// <inheritdoc/>
     public async Task<IReadOnlyList<AdapterActivityDto>> FetchActivitiesAsync(
@@ -19,6 +24,7 @@ public sealed class StravaActivitySyncAdapter(StravaApiClient client) : IActivit
         Instant since,
         CancellationToken cancellationToken = default)
     {
-        throw new NotSupportedException();
+        await Task.CompletedTask;
+        return [];
     }
 }

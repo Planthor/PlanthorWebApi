@@ -25,4 +25,12 @@ public interface IMemberRepository : IWriteRepository<Member>
     /// <param name="cancellationToken">The cancellation token.</param>
     /// <returns>A task that represents the asynchronous operation. The task result contains the member, or null if not found.</returns>
     Task<Member?> GetByIdentifyNameAsync(string identifyName, CancellationToken cancellationToken);
+
+    /// <summary>
+    /// Determines whether a member with the specified identity name exists.
+    /// </summary>
+    /// <param name="identifyName">The external identity name.</param>
+    /// <param name="cancellationToken">The cancellation token.</param>
+    /// <returns>A task that represents the asynchronous operation. The task result is true if the member exists; otherwise, false.</returns>
+    Task<bool> AnyAsync(string identifyName, CancellationToken cancellationToken);
 }
