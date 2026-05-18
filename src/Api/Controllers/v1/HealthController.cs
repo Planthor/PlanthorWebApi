@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Data.Common;
 using System.Diagnostics;
 using System.Net.Http;
 using System.Threading.Tasks;
@@ -78,7 +79,7 @@ public class HealthController : ControllerBase
                 message = "MongoDB connection successful"
             });
         }
-        catch (Exception)
+        catch (DbException)
         {
             stopwatch.Stop();
             return StatusCode(StatusCodes.Status503ServiceUnavailable, new

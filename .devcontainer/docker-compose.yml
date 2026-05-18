@@ -1,4 +1,4 @@
-version: '3.8'
+﻿version: '3.8'
 name: planthor-webapi-ws
 
 services:
@@ -8,6 +8,7 @@ services:
       dockerfile: Dockerfile
     volumes:
       - ..:/workspace/planthorwebapi:cached
+      - "${HOME}/Library/Application Support/Code/User:/home/vscode/.local/share/code/user:cached"
     command: sleep infinity
     user: vscode
     networks:
