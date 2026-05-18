@@ -1,10 +1,12 @@
 ﻿using System;
 using System.Diagnostics;
+using System.Net.Http;
 using System.Threading.Tasks;
 using Infrastructure.Context;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Configuration;
 
 namespace Api.Controllers.v1;
 
@@ -16,14 +18,20 @@ namespace Api.Controllers.v1;
 public class HealthController : ControllerBase
 {
     private readonly PlanthorDbContext _dbContext;
+    private readonly IConfiguration _configuration;
+    private readonly IHttpClientFactory _httpClientFactory;
 
     /// <summary>
     /// Initializes a new instance of the <see cref="HealthController"/> class.
     /// </summary>
     /// <param name="dbContext">The Planthor database context.</param>
-    public HealthController(PlanthorDbContext dbContext)
+    /// <param name="configuration">The application configuration.</param>
+    /// <param name="httpClientFactory">The HTTP client factory for making requests.</param>
+    public HealthController(PlanthorDbContext dbContext, IConfiguration configuration, IHttpClientFactory httpClientFactory)
     {
         _dbContext = dbContext ?? throw new ArgumentNullException(nameof(dbContext));
+        _configuration = configuration ?? throw new ArgumentNullException(nameof(configuration));
+        _httpClientFactory = httpClientFactory ?? throw new ArgumentNullException(nameof(httpClientFactory));
     }
 
     /// <summary>
@@ -77,6 +85,72 @@ public class HealthController : ControllerBase
             {
                 status = "disconnected",
                 database = "planthordb",
+                latencyMs = stopwatch.ElapsedMilliseconds,
+                timestamp = DateTimeOffset.UtcNow.ToString("O"),
+                error = ex.Message,
+                errorType = ex.GetType().Name
+            });
+        }
+    }
+
+    /// <summary>
+    /// Checks authentication server (Keycloak) connectivity.
+    /// </summary>
+    /// <returns>A JSON object containing authentication server connection status, latency, and error details if applicable.</returns>
+    /// <response code="200">Authentication server is reachable and responding.</response>
+    /// <response code="503">Authentication server is unavailable or unreachable.</response>
+    [HttpGet("auth")]
+    [ProducesResponseType(StatusCodes.Status200OK)]
+    [ProducesResponseType(StatusCodes.Status503ServiceUnavailable)]
+    public async Task<IActionResult> CheckAuthHealthAsync()
+    {
+        var stopwatch = Stopwatch.StartNew();
+        try
+        {
+            var authority = _configuration["Authentication:Keycloak:Authority"]
+                ?? _configuration["Authentication:Authority"]
+                ?? "http://localhost:8180/realms/planthor";
+
+            // Construct the well-known OpenID Connect discovery endpoint
+            var discoveryUrl = authority.TrimEnd('/') + "/.well-known/openid-configuration";
+
+            var client = _httpClientFactory.CreateClient();
+            client.Timeout = TimeSpan.FromSeconds(10);
+
+            var response = await client.GetAsync(discoveryUrl);
+            stopwatch.Stop();
+
+            if (response.IsSuccessStatusCode)
+            {
+                return Ok(new
+                {
+                    status = "connected",
+                    server = "keycloak",
+                    authority = authority,
+                    latencyMs = stopwatch.ElapsedMilliseconds,
+                    timestamp = DateTimeOffset.UtcNow.ToString("O"),
+                    message = "Authentication server is reachable"
+                });
+            }
+
+            return StatusCode(StatusCodes.Status503ServiceUnavailable, new
+            {
+                status = "disconnected",
+                server = "keycloak",
+                authority = authority,
+                httpStatusCode = (int)response.StatusCode,
+                latencyMs = stopwatch.ElapsedMilliseconds,
+                timestamp = DateTimeOffset.UtcNow.ToString("O"),
+                error = $"Server returned {response.StatusCode}"
+            });
+        }
+        catch (Exception ex)
+        {
+            stopwatch.Stop();
+            return StatusCode(StatusCodes.Status503ServiceUnavailable, new
+            {
+                status = "disconnected",
+                server = "keycloak",
                 latencyMs = stopwatch.ElapsedMilliseconds,
                 timestamp = DateTimeOffset.UtcNow.ToString("O"),
                 error = ex.Message,
