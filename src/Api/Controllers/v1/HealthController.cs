@@ -170,7 +170,7 @@ public class HealthController : ControllerBase
                 errorType = "OperationCanceledException"
             });
         }
-        catch (Exception)
+        catch (InvalidOperationException)
         {
             stopwatch.Stop();
             return StatusCode(StatusCodes.Status503ServiceUnavailable, new
@@ -180,7 +180,20 @@ public class HealthController : ControllerBase
                 latencyMs = stopwatch.ElapsedMilliseconds,
                 timestamp = DateTimeOffset.UtcNow.ToString("O"),
                 error = "Unable to verify connection",
-                errorType = "Exception"
+                errorType = "InvalidOperationException"
+            });
+        }
+        catch (UriFormatException)
+        {
+            stopwatch.Stop();
+            return StatusCode(StatusCodes.Status503ServiceUnavailable, new
+            {
+                status = "disconnected",
+                server = "keycloak",
+                latencyMs = stopwatch.ElapsedMilliseconds,
+                timestamp = DateTimeOffset.UtcNow.ToString("O"),
+                error = "Unable to verify connection",
+                errorType = "UriFormatException"
             });
         }
     }
