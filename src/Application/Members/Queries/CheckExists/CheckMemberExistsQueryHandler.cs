@@ -1,4 +1,4 @@
-using System.Threading;
+﻿using System.Threading;
 using System.Threading.Tasks;
 using Application.Shared;
 using Domain.Members;
@@ -10,6 +10,7 @@ public class CheckMemberExistsQueryHandler(IMemberRepository memberRepository)
 {
     public async Task<bool> Handle(CheckMemberExistsQuery request, CancellationToken cancellationToken)
     {
-        return await memberRepository.AnyAsync(request.IdentifyName, cancellationToken);
+        var member = await memberRepository.GetByIdentifyNameAsync(request.IdentifyName, cancellationToken);
+        return member is not null;
     }
 }

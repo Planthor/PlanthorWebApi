@@ -78,7 +78,7 @@ public class HealthController : ControllerBase
                 message = "MongoDB connection successful"
             });
         }
-        catch (Exception ex)
+        catch (Exception)
         {
             stopwatch.Stop();
             return StatusCode(StatusCodes.Status503ServiceUnavailable, new
@@ -87,8 +87,8 @@ public class HealthController : ControllerBase
                 database = "planthordb",
                 latencyMs = stopwatch.ElapsedMilliseconds,
                 timestamp = DateTimeOffset.UtcNow.ToString("O"),
-                error = ex.Message,
-                errorType = ex.GetType().Name
+                error = "Unable to connect to database",
+                errorType = "DatabaseConnectionException"
             });
         }
     }
@@ -117,7 +117,7 @@ public class HealthController : ControllerBase
             var client = _httpClientFactory.CreateClient();
             client.Timeout = TimeSpan.FromSeconds(10);
 
-            var response = await client.GetAsync(discoveryUrl);
+            using var response = await client.GetAsync(discoveryUrl);
             stopwatch.Stop();
 
             if (response.IsSuccessStatusCode)
@@ -144,7 +144,7 @@ public class HealthController : ControllerBase
                 error = $"Server returned {response.StatusCode}"
             });
         }
-        catch (Exception ex)
+        catch (HttpRequestException)
         {
             stopwatch.Stop();
             return StatusCode(StatusCodes.Status503ServiceUnavailable, new
@@ -153,8 +153,34 @@ public class HealthController : ControllerBase
                 server = "keycloak",
                 latencyMs = stopwatch.ElapsedMilliseconds,
                 timestamp = DateTimeOffset.UtcNow.ToString("O"),
-                error = ex.Message,
-                errorType = ex.GetType().Name
+                error = "Connection failed",
+                errorType = "HttpRequestException"
+            });
+        }
+        catch (OperationCanceledException)
+        {
+            stopwatch.Stop();
+            return StatusCode(StatusCodes.Status503ServiceUnavailable, new
+            {
+                status = "disconnected",
+                server = "keycloak",
+                latencyMs = stopwatch.ElapsedMilliseconds,
+                timestamp = DateTimeOffset.UtcNow.ToString("O"),
+                error = "Connection timeout",
+                errorType = "OperationCanceledException"
+            });
+        }
+        catch (Exception)
+        {
+            stopwatch.Stop();
+            return StatusCode(StatusCodes.Status503ServiceUnavailable, new
+            {
+                status = "disconnected",
+                server = "keycloak",
+                latencyMs = stopwatch.ElapsedMilliseconds,
+                timestamp = DateTimeOffset.UtcNow.ToString("O"),
+                error = "Unable to verify connection",
+                errorType = "Exception"
             });
         }
     }
