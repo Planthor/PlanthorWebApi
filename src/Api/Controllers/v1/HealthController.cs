@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Data.Common;
 using System.Diagnostics;
+using System.Globalization;
 using System.Net.Http;
 using System.Threading.Tasks;
 using Infrastructure.Context;
@@ -18,6 +19,9 @@ namespace Api.Controllers.v1;
 [Route("v1/[controller]")]
 public class HealthController : ControllerBase
 {
+    private const string StatusDisconnected = "disconnected";
+    private const string ServerKeycloak = "keycloak";
+
     private readonly PlanthorDbContext _dbContext;
     private readonly IConfiguration _configuration;
     private readonly IHttpClientFactory _httpClientFactory;
@@ -47,7 +51,7 @@ public class HealthController : ControllerBase
         return Ok(new
         {
             status = "healthy",
-            timestamp = DateTimeOffset.UtcNow.ToString("O"),
+            timestamp = DateTimeOffset.UtcNow.ToString("O", CultureInfo.InvariantCulture),
             version = "1.0"
         });
     }
@@ -75,7 +79,7 @@ public class HealthController : ControllerBase
                 status = "connected",
                 database = "planthordb",
                 latencyMs = stopwatch.ElapsedMilliseconds,
-                timestamp = DateTimeOffset.UtcNow.ToString("O"),
+                timestamp = DateTimeOffset.UtcNow.ToString("O", CultureInfo.InvariantCulture),
                 message = "MongoDB connection successful"
             });
         }
@@ -84,10 +88,10 @@ public class HealthController : ControllerBase
             stopwatch.Stop();
             return StatusCode(StatusCodes.Status503ServiceUnavailable, new
             {
-                status = "disconnected",
+                status = StatusDisconnected,
                 database = "planthordb",
                 latencyMs = stopwatch.ElapsedMilliseconds,
-                timestamp = DateTimeOffset.UtcNow.ToString("O"),
+                timestamp = DateTimeOffset.UtcNow.ToString("O", CultureInfo.InvariantCulture),
                 error = "Unable to connect to database",
                 errorType = "DatabaseConnectionException"
             });
@@ -108,17 +112,17 @@ public class HealthController : ControllerBase
         var stopwatch = Stopwatch.StartNew();
         try
         {
-            var authority = _configuration["Authentication:Keycloak:Authority"]
+            var authorityUrl = _configuration["Authentication:Keycloak:Authority"]
                 ?? _configuration["Authentication:Authority"]
                 ?? "http://localhost:8180/realms/planthor";
 
             // Construct the well-known OpenID Connect discovery endpoint
-            var discoveryUrl = authority.TrimEnd('/') + "/.well-known/openid-configuration";
+            var discoveryUri = new Uri(new Uri(authorityUrl.TrimEnd('/')), ".well-known/openid-configuration");
 
             var client = _httpClientFactory.CreateClient();
             client.Timeout = TimeSpan.FromSeconds(10);
 
-            using var response = await client.GetAsync(discoveryUrl);
+            using var response = await client.GetAsync(discoveryUri);
             stopwatch.Stop();
 
             if (response.IsSuccessStatusCode)
@@ -126,22 +130,22 @@ public class HealthController : ControllerBase
                 return Ok(new
                 {
                     status = "connected",
-                    server = "keycloak",
-                    authority = authority,
+                    server = ServerKeycloak,
+                    authority = authorityUrl,
                     latencyMs = stopwatch.ElapsedMilliseconds,
-                    timestamp = DateTimeOffset.UtcNow.ToString("O"),
+                    timestamp = DateTimeOffset.UtcNow.ToString("O", CultureInfo.InvariantCulture),
                     message = "Authentication server is reachable"
                 });
             }
 
             return StatusCode(StatusCodes.Status503ServiceUnavailable, new
             {
-                status = "disconnected",
-                server = "keycloak",
-                authority = authority,
+                status = StatusDisconnected,
+                server = ServerKeycloak,
+                authority = authorityUrl,
                 httpStatusCode = (int)response.StatusCode,
                 latencyMs = stopwatch.ElapsedMilliseconds,
-                timestamp = DateTimeOffset.UtcNow.ToString("O"),
+                timestamp = DateTimeOffset.UtcNow.ToString("O", CultureInfo.InvariantCulture),
                 error = $"Server returned {response.StatusCode}"
             });
         }
@@ -150,10 +154,10 @@ public class HealthController : ControllerBase
             stopwatch.Stop();
             return StatusCode(StatusCodes.Status503ServiceUnavailable, new
             {
-                status = "disconnected",
-                server = "keycloak",
+                status = StatusDisconnected,
+                server = ServerKeycloak,
                 latencyMs = stopwatch.ElapsedMilliseconds,
-                timestamp = DateTimeOffset.UtcNow.ToString("O"),
+                timestamp = DateTimeOffset.UtcNow.ToString("O", CultureInfo.InvariantCulture),
                 error = "Connection failed",
                 errorType = "HttpRequestException"
             });
@@ -163,10 +167,10 @@ public class HealthController : ControllerBase
             stopwatch.Stop();
             return StatusCode(StatusCodes.Status503ServiceUnavailable, new
             {
-                status = "disconnected",
-                server = "keycloak",
+                status = StatusDisconnected,
+                server = ServerKeycloak,
                 latencyMs = stopwatch.ElapsedMilliseconds,
-                timestamp = DateTimeOffset.UtcNow.ToString("O"),
+                timestamp = DateTimeOffset.UtcNow.ToString("O", CultureInfo.InvariantCulture),
                 error = "Connection timeout",
                 errorType = "OperationCanceledException"
             });
@@ -176,10 +180,10 @@ public class HealthController : ControllerBase
             stopwatch.Stop();
             return StatusCode(StatusCodes.Status503ServiceUnavailable, new
             {
-                status = "disconnected",
-                server = "keycloak",
+                status = StatusDisconnected,
+                server = ServerKeycloak,
                 latencyMs = stopwatch.ElapsedMilliseconds,
-                timestamp = DateTimeOffset.UtcNow.ToString("O"),
+                timestamp = DateTimeOffset.UtcNow.ToString("O", CultureInfo.InvariantCulture),
                 error = "Unable to verify connection",
                 errorType = "InvalidOperationException"
             });
@@ -189,10 +193,10 @@ public class HealthController : ControllerBase
             stopwatch.Stop();
             return StatusCode(StatusCodes.Status503ServiceUnavailable, new
             {
-                status = "disconnected",
-                server = "keycloak",
+                status = StatusDisconnected,
+                server = ServerKeycloak,
                 latencyMs = stopwatch.ElapsedMilliseconds,
-                timestamp = DateTimeOffset.UtcNow.ToString("O"),
+                timestamp = DateTimeOffset.UtcNow.ToString("O", CultureInfo.InvariantCulture),
                 error = "Unable to verify connection",
                 errorType = "UriFormatException"
             });
