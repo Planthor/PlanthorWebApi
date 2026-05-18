@@ -1,0 +1,8 @@
+title = "Planthor gitleaks allowlist"
+
+[allowlist]
+description = "Ignore known false positives in removed local/dev files"
+paths = [
+  '''^docker-compose\.yml$''',
+  '''^tests/MobileClientSpike/mobile_android_spike/ios/Podfile\.lock$''',
+]
