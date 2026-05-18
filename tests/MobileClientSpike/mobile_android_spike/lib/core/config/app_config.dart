@@ -1,4 +1,4 @@
-/// Centralized app configuration with environment-aware switching.
+﻿/// Centralized app configuration with environment-aware switching.
 ///
 /// Use `--dart-define=ENV=prod` to target cloud services.
 /// Defaults to `dev` (local infrastructure via Docker Compose).
