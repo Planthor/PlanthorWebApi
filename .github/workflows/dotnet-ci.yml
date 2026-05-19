@@ -1,4 +1,4 @@
-name: Dotnet CI Workflow
+﻿name: Dotnet CI Workflow
 
 on:
   push:
@@ -18,7 +18,7 @@ jobs:
       - name: Setup .NET
         uses: actions/setup-dotnet@v4
         with:
-          dotnet-version: 8.x
+          dotnet-version: 10.x
 
       - name: Cache .NET packages
         uses: actions/cache@v4
