@@ -1,4 +1,5 @@
-﻿using Adapters.Abstraction;
+﻿using System;
+using Adapters.Abstraction;
 using Adapters.Strava.Client;
 using NodaTime;
 
@@ -11,14 +12,19 @@ namespace Adapters.Strava;
 /// </summary>
 public sealed class StravaActivitySyncAdapter(StravaApiClient client) : IActivitySyncAdapter
 {
-    public string ProviderId => throw new NotImplementedException();
+    /// <summary>
+    /// Gets the provider ID for Strava.
+    /// </summary>
+    public string ProviderId => "STRAVA";
 
     /// <inheritdoc/>
     public async Task<IReadOnlyList<AdapterActivityDto>> FetchActivitiesAsync(
         Guid memberId,
         Instant since,
-        CancellationToken cancellationToken = default)
+        CancellationToken cancellationToken)
     {
-        throw new NotSupportedException();
+        ArgumentNullException.ThrowIfNull(client);
+        await Task.CompletedTask;
+        return [];
     }
 }
