@@ -113,7 +113,6 @@ public class HealthController : ControllerBase
         try
         {
             var authorityUrl = _configuration["Authentication:Keycloak:Authority"]
-                ?? _configuration["Authentication:Authority"]
                 ?? "http://localhost:8180/realms/planthor";
 
             // Construct the well-known OpenID Connect discovery endpoint

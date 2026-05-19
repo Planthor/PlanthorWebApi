@@ -1,7 +1,9 @@
 ﻿using System;
+using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using Application.Members.Queries.CheckExists;
+using Application.Shared;
 using Domain.Members;
 using Moq;
 
@@ -9,13 +11,13 @@ namespace Application.Tests.Members.Queries.CheckExists;
 
 public class CheckMemberExistsQueryHandlerTests
 {
-    private readonly Mock<IMemberRepository> _mockMemberRepository;
+    private readonly Mock<IReadOnlyContext> _mockReadOnlyContext;
     private readonly CheckMemberExistsQueryHandler _handler;
 
     public CheckMemberExistsQueryHandlerTests()
     {
-        _mockMemberRepository = new Mock<IMemberRepository>();
-        _handler = new CheckMemberExistsQueryHandler(_mockMemberRepository.Object);
+        _mockReadOnlyContext = new Mock<IReadOnlyContext>();
+        _handler = new CheckMemberExistsQueryHandler(_mockReadOnlyContext.Object);
     }
 
     [Fact]
@@ -25,17 +27,21 @@ public class CheckMemberExistsQueryHandlerTests
         var identifyName = "nonexistent_user";
         var query = new CheckMemberExistsQuery(identifyName);
 
-        _mockMemberRepository
-            .Setup(r => r.GetByIdentifyNameAsync(identifyName, It.IsAny<CancellationToken>()))
-            .ReturnsAsync((Member?)null);
+        _mockReadOnlyContext
+            .Setup(c => c.AnyAsync<Member>(
+                It.IsAny<Func<IQueryable<Member>, IQueryable<Member>>>(),
+                It.IsAny<CancellationToken>()))
+            .ReturnsAsync(false);
 
         // Act
         var result = await _handler.Handle(query, CancellationToken.None);
 
         // Assert
         Assert.False(result);
-        _mockMemberRepository.Verify(
-            r => r.GetByIdentifyNameAsync(identifyName, It.IsAny<CancellationToken>()),
+        _mockReadOnlyContext.Verify(
+            c => c.AnyAsync<Member>(
+                It.IsAny<Func<IQueryable<Member>, IQueryable<Member>>>(),
+                It.IsAny<CancellationToken>()),
             Times.Once);
     }
 
@@ -47,16 +53,20 @@ public class CheckMemberExistsQueryHandlerTests
         var query = new CheckMemberExistsQuery(identifyName);
         var cancellationToken = new CancellationToken();
 
-        _mockMemberRepository
-            .Setup(r => r.GetByIdentifyNameAsync(It.IsAny<string>(), It.IsAny<CancellationToken>()))
-            .ReturnsAsync((Member?)null);
+        _mockReadOnlyContext
+            .Setup(c => c.AnyAsync<Member>(
+                It.IsAny<Func<IQueryable<Member>, IQueryable<Member>>>(),
+                It.IsAny<CancellationToken>()))
+            .ReturnsAsync(false);
 
         // Act
         _ = await _handler.Handle(query, cancellationToken);
 
         // Assert
-        _mockMemberRepository.Verify(
-            r => r.GetByIdentifyNameAsync(identifyName, cancellationToken),
+        _mockReadOnlyContext.Verify(
+            c => c.AnyAsync<Member>(
+                It.IsAny<Func<IQueryable<Member>, IQueryable<Member>>>(),
+                cancellationToken),
             Times.Once);
     }
 
@@ -67,16 +77,20 @@ public class CheckMemberExistsQueryHandlerTests
         var identifyName = "testuser123";
         var query = new CheckMemberExistsQuery(identifyName);
 
-        _mockMemberRepository
-            .Setup(r => r.GetByIdentifyNameAsync(identifyName, It.IsAny<CancellationToken>()))
-            .ReturnsAsync((Member?)null);
+        _mockReadOnlyContext
+            .Setup(c => c.AnyAsync<Member>(
+                It.IsAny<Func<IQueryable<Member>, IQueryable<Member>>>(),
+                It.IsAny<CancellationToken>()))
+            .ReturnsAsync(true);
 
         // Act
         await _handler.Handle(query, CancellationToken.None);
 
-        // Assert - verify the repository was called with the correct identify name
-        _mockMemberRepository.Verify(
-            r => r.GetByIdentifyNameAsync(identifyName, It.IsAny<CancellationToken>()),
+        // Assert - verify the context was called once
+        _mockReadOnlyContext.Verify(
+            c => c.AnyAsync<Member>(
+                It.IsAny<Func<IQueryable<Member>, IQueryable<Member>>>(),
+                It.IsAny<CancellationToken>()),
             Times.Once);
     }
 }

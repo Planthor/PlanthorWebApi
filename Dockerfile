@@ -15,8 +15,8 @@ EXPOSE 8080
 ENV ASPNETCORE_ENVIRONMENT="Production"
 ENV ConnectionStrings__PlanthorDbContext=""
 ENV MediatR__LicenseKey=""
-ENV Authentication__Authority=""
-ENV Authentication__Audience="planthor-backend"
+ENV Authentication__Keycloak__Authority=""
+ENV Authentication__Keycloak__Audience="planthor-backend"
 ENV Authentication__RequireHttpsMetadata="true"
 
 COPY --from=build /app/publish .
