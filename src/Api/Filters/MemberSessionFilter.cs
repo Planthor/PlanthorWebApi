@@ -33,11 +33,11 @@ public class MemberSessionFilter : IAsyncActionFilter
     }
 
     /// <summary>
-    ///
+    /// Executes the action filter asynchronously.
     /// </summary>
-    /// <param name="context"></param>
-    /// <param name="next"></param>
-    /// <returns></returns>
+    /// <param name="context">The action executing context.</param>
+    /// <param name="next">The delegate to execute the next action filter or the action itself.</param>
+    /// <returns>A task that represents the asynchronous operation.</returns>
     public Task OnActionExecutionAsync(ActionExecutingContext context, ActionExecutionDelegate next)
     {
         ArgumentNullException.ThrowIfNull(context);

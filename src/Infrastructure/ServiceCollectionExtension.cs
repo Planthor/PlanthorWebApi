@@ -1,4 +1,4 @@
-﻿using Application.Shared;
+using Application.Shared;
 using Quartz;
 using Domain.Members;
 using Infrastructure.BackgroundJobClient;
@@ -32,6 +32,7 @@ public static class ServiceCollectionExtension
 
         // Register your specific aggregate repositories (Manual DI)
         services.AddScoped<IMemberRepository, MemberRepository>();
+        services.AddScoped<IReadOnlyContext, ReadOnlyContext>();
         services.AddScoped<IBackgroundJobClient, QuartzBackgroundJobClient>();
         services.AddScoped<IAvatarStorageService, AzureBlobAvatarStorageService>();
 

@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Threading;
 using System.Threading.Tasks;
+using Api.Filters;
 using Application.Dtos;
 using Application.Members.Commands.Create;
 using Application.Members.Commands.Update;
@@ -24,6 +25,7 @@ namespace Api.Controllers.v1.Resources;
 /// <param name="memberDetailsQueryValidator">The validator for <see cref="MemberDetailsQuery"/>.</param>
 /// <exception cref="ArgumentNullException">Thrown when sender is null.</exception>
 [Authorize]
+[ServiceFilter(typeof(MemberSessionFilter))]
 [ApiController]
 [Route("v1/[controller]")]
 public class MembersController(

@@ -31,6 +31,7 @@ try
         builder.Configuration.GetConnectionString("PlanthorDbContext")
             ?? throw new InvalidOperationException("PlanthorDbContext is not set in the configuration file."));
 
+    builder.Services.AddScoped<MemberSessionFilter>();
     builder.Services.AddApplicationServices(builder.Configuration);
 
     builder.Services
@@ -54,10 +55,7 @@ try
     builder.Services.AddAuthorization();
 
     // API Client
-    builder.Services.AddControllers(options =>
-    {
-        options.Filters.Add<MemberSessionFilter>();
-    });
+    builder.Services.AddControllers();
 
     builder.Services.AddEndpointsApiExplorer();
 
